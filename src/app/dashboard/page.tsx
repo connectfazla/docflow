@@ -10,6 +10,7 @@ import { Card, StatCard } from '@/components/ui/card'
 import { StatusBadge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/store'
+import { useSession } from 'next-auth/react'
 import { mockActivity, chartData, pipelineData } from '@/lib/mock-data'
 import { formatRelative } from '@/lib/utils'
 import {
@@ -28,7 +29,8 @@ const activityIcons: Record<string, { icon: React.ReactNode; color: string }> = 
 }
 
 export default function DashboardPage() {
-  const { documents, user } = useAppStore()
+  const { documents } = useAppStore()
+  const { data: session } = useSession()
 
   const recentDocs = documents.slice(0, 5)
   const needsAttention = documents.filter(d => d.status === 'viewed' || d.status === 'sent').slice(0, 3)
@@ -42,7 +44,7 @@ export default function DashboardPage() {
 
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-  const firstName = user.name.split(' ')[0]
+  const firstName = session?.user?.name?.split(' ')[0] ?? 'there'
 
   return (
     <div className="animate-fade-in">

@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useAppStore } from '@/store'
+import { useSession } from 'next-auth/react'
 import { cn, getInitials } from '@/lib/utils'
 
 const settingsTabs = [
@@ -23,20 +24,24 @@ const settingsTabs = [
 ]
 
 export default function SettingsPage() {
-  const { user, showToast } = useAppStore()
+  const { showToast } = useAppStore()
+  const { data: session } = useSession()
   const [activeTab, setActiveTab] = useState('profile')
   const [saved, setSaved] = useState(false)
 
+  const sessionName = session?.user?.name ?? 'Admin'
+  const sessionEmail = session?.user?.email ?? ''
+
   // Profile state
-  const [name, setName] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
+  const [name, setName] = useState(sessionName)
+  const [email, setEmail] = useState(sessionEmail)
   const [bio, setBio] = useState('Building great software and automating workflows.')
   const [phone, setPhone] = useState('+1 (555) 000-0000')
   const [timezone, setTimezone] = useState('America/New_York')
 
   // Workspace state
-  const [workspaceName, setWorkspaceName] = useState(user.workspace)
-  const [workspaceDomain, setWorkspaceDomain] = useState('acmecorp')
+  const [workspaceName, setWorkspaceName] = useState('DocFlow Workspace')
+  const [workspaceDomain, setWorkspaceDomain] = useState('docflow')
   const [workspaceSize, setWorkspaceSize] = useState('11-50')
 
   // Notifications state
@@ -137,7 +142,7 @@ export default function SettingsPage() {
                   <div>
                     <h3 className="font-semibold text-slate-900">{name}</h3>
                     <p className="text-sm text-slate-500">{email}</p>
-                    <p className="text-xs text-slate-400 mt-0.5 capitalize">{user.role} · {user.workspace}</p>
+                    <p className="text-xs text-slate-400 mt-0.5 capitalize">Super Admin · DocFlow Pro</p>
                   </div>
                 </div>
 

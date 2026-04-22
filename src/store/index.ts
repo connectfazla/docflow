@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Document, Template, User } from '@/types'
-import { mockDocuments, mockTemplates, currentUser } from '@/lib/mock-data'
 
 interface Toast {
   id: string
@@ -13,7 +12,7 @@ interface Toast {
 interface AppState {
   documents: Document[]
   templates: Template[]
-  user: User
+  user: User | null
   toasts: Toast[]
 
   // Document actions
@@ -23,6 +22,9 @@ interface AppState {
   sendDocument: (id: string) => void
   duplicateDocument: (id: string) => Document
 
+  // User actions
+  setUser: (user: User) => void
+
   // Toast actions
   showToast: (toast: Omit<Toast, 'id'>) => void
   dismissToast: (id: string) => void
@@ -31,9 +33,9 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      documents: mockDocuments,
-      templates: mockTemplates,
-      user: currentUser,
+      documents: [],
+      templates: [],
+      user: null,
       toasts: [],
 
       addDocument: (doc) =>
@@ -77,6 +79,8 @@ export const useAppStore = create<AppState>()(
         return copy
       },
 
+      setUser: (user) => set({ user }),
+
       showToast: (toast) => {
         const id = `toast-${Date.now()}`
         set((s) => ({ toasts: [...s.toasts, { ...toast, id }] }))
@@ -90,6 +94,7 @@ export const useAppStore = create<AppState>()(
       name: 'docflow-pro-store',
       partialize: (state) => ({
         documents: state.documents,
+        templates: state.templates,
         user: state.user,
       }),
     }

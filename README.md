@@ -3,22 +3,21 @@
 <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js&logoColor=white" />
 <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
 <img src="https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-<img src="https://img.shields.io/badge/Zustand-5-orange?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Tiptap-3-6366F1?style=for-the-badge" />
+<img src="https://img.shields.io/badge/NextAuth.js-4-purple?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Docker-ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+<img src="https://img.shields.io/badge/Vercel-ready-black?style=for-the-badge&logo=vercel&logoColor=white" />
 
 <br /><br />
 
-<img width="80" src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/pen-tool.svg" />
+# 🖊 DocFlow Pro
 
-# DocFlow Pro
+### The all-in-one document automation platform — create, send, track & e-sign documents.
 
-### The modern document automation platform — create, send, track & sign documents in minutes.
-
-*A full-featured PandaDoc-inspired SaaS built with Next.js 14, TypeScript & Tailwind CSS.*
+*Production-ready · NextAuth super admin · Vercel & Docker deploy · Zero demo data*
 
 <br />
 
-[✨ Features](#-features) · [🚀 Quick Start](#-quick-start) · [🗂 Project Structure](#-project-structure) · [🛠 Tech Stack](#-tech-stack) · [📸 Screenshots](#-screenshots)
+[🚀 Quick Start](#-quick-start) · [🔐 Super Admin](#-super-admin) · [☁️ Deploy to Vercel](#️-deploy-to-vercel) · [🐳 Deploy with Docker](#-deploy-with-docker) · [✨ Features](#-features)
 
 <br />
 
@@ -26,99 +25,187 @@
 
 </div>
 
-## ✨ Features
-
-### 📄 Document Management
-- **Rich-text editor** powered by Tiptap v3 — bold, italic, tables, alignment, colors, highlights, links
-- **List & Grid views** with search, status filters, bulk select, and sort
-- **One-click duplicate** — copies a document and drops you straight into the editor
-- **Delete with confirmation** modal to prevent accidents
-- **Document detail page** — signing progress bar, recipients list, and full audit trail
-
-### ✍️ E-Signature Workflow
-- **Send via Email** — add multiple recipients with roles (Signer / Viewer / Approver)
-- **Copy shareable link** — auto-generated signing URL with optional expiry and password
-- **Recipient signing page** — fully standalone (no login required)
-  - **Draw** your signature on a canvas
-  - **Type** your name in 4 different font styles
-  - **Upload** an image of your signature
-- **ESIGN / eIDAS compliant** — legal agreement checkbox, audit ID, compliance messaging
-
-### 📊 Dashboard & Analytics
-- Live stats — total docs, awaiting signature, completed, completion rate
-- **Area chart** — document activity over time (sent / signed / completed)
-- **Donut chart** — real-time pipeline status breakdown
-- Activity feed and "Needs Attention" banner
-- Stats driven by live Zustand store, update instantly on any action
-
-### ⚙️ Settings (6 tabs)
-| Tab | What's inside |
-|-----|--------------|
-| **Profile** | Name, email, bio, phone, timezone, avatar, signature style |
-| **Workspace** | Name, URL slug, company size, default toggles, danger zone |
-| **Branding** | Logo upload, brand colors, email preview, white-label toggle |
-| **Notifications** | Per-event toggles — viewed, signed, expiring, digest, SMS |
-| **Security** | Change password, 2FA toggle, active sessions with revoke |
-| **Billing** | Current plan, usage bars, payment method, invoice history |
-
-### 👥 Team Management
-- Member table — avatar, role badge, docs sent, last active, status
-- Role system: **Owner · Admin · Manager · Member · Viewer**
-- Permissions matrix with per-role capability cards
-- Invite modal with role selector and live permissions preview
-
-### 🔗 Integrations
-9 built-in integrations across 5 categories:
-
-| Category | Integrations |
-|----------|-------------|
-| CRM | HubSpot, Salesforce, Pipedrive |
-| Payments | Stripe |
-| Automation | Zapier |
-| Notifications | Slack, Microsoft Teams |
-| Storage | Google Drive |
-| Finance | QuickBooks |
-
-Connect / disconnect with loading states, configure modal for connected tools, REST API key card.
-
-### 🎨 UI / UX
-- Toast notification system (success · error · warning · info) — auto-dismiss after 4s
-- Accessible modal system with Escape-to-close and backdrop click
-- Sidebar live search with instant document results
-- Animated page transitions, skeleton states, hover effects
-- Fully responsive layout
-
----
-
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js **18+**
 - npm or yarn
 
-### Installation
-
 ```bash
 # 1. Clone the repo
 git clone https://github.com/connectfazla/docflow.git
 cd docflow
 
-# 2. Install dependencies
+# 2. Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your credentials (see Super Admin section)
+
+# 3. Install dependencies
 npm install
 
-# 3. Start the development server
+# 4. Start the dev server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — you're in. No environment variables needed to run locally.
+Open [http://localhost:3000](http://localhost:3000) — you'll see the landing page.  
+Sign in at [http://localhost:3000/login](http://localhost:3000/login) with your admin credentials.
 
-### Other commands
+---
+
+## 🔐 Super Admin
+
+All admin credentials are configured via **environment variables** — no hardcoded passwords, no database needed.
+
+### Required `.env.local`
+
+```env
+# Generate with: openssl rand -base64 32
+NEXTAUTH_SECRET=your-super-secret-key-here
+
+NEXTAUTH_URL=http://localhost:3000    # Change to your domain in production
+
+ADMIN_EMAIL=admin@docflow.pro         # Admin login email
+ADMIN_NAME=Super Admin                # Admin display name
+ADMIN_PASSWORD=Admin@DocFlow2024!     # Admin password (dev)
+```
+
+### Secure Password Hash (Production recommended)
+
+For production, use a bcrypt hash instead of a plain password:
 
 ```bash
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # Run ESLint
+# Generate a hash
+node -e "const b=require('bcryptjs'); b.hash('YourStrongPassword!',12).then(console.log)"
+
+# Add to .env.local
+ADMIN_PASSWORD_HASH=$2a$12$...your-hash-here...
+# Remove ADMIN_PASSWORD when using hash
 ```
+
+### Default Dev Credentials
+| Field | Value |
+|-------|-------|
+| Email | `admin@docflow.pro` |
+| Password | `Admin@DocFlow2024!` |
+
+> ⚠️ **Change these immediately in any production deployment.**
+
+---
+
+## ☁️ Deploy to Vercel
+
+The easiest deployment option — one click and you're live.
+
+### Option A: Vercel CLI
+
+```bash
+npm install -g vercel
+vercel --prod
+```
+
+### Option B: Vercel Dashboard
+
+1. Push this repo to GitHub *(already done)*
+2. Go to [vercel.com/new](https://vercel.com/new) → Import from GitHub
+3. Select `connectfazla/docflow`
+4. Add environment variables in the Vercel dashboard:
+
+| Variable | Value |
+|----------|-------|
+| `NEXTAUTH_SECRET` | `openssl rand -base64 32` output |
+| `NEXTAUTH_URL` | `https://your-app.vercel.app` |
+| `ADMIN_EMAIL` | your admin email |
+| `ADMIN_NAME` | your name |
+| `ADMIN_PASSWORD` | strong password (or use `ADMIN_PASSWORD_HASH`) |
+
+5. Click **Deploy** ✓
+
+---
+
+## 🐳 Deploy with Docker
+
+### Quick start
+
+```bash
+# Copy and configure env
+cp .env.example .env.local
+nano .env.local   # Set your credentials
+
+# Build and run
+docker-compose up -d
+
+# App is live at http://localhost:3000
+```
+
+### Manual Docker build
+
+```bash
+# Build the image
+docker build -t docflow-pro .
+
+# Run with env vars
+docker run -d \
+  -p 3000:3000 \
+  -e NEXTAUTH_SECRET="your-secret" \
+  -e NEXTAUTH_URL="http://localhost:3000" \
+  -e ADMIN_EMAIL="admin@docflow.pro" \
+  -e ADMIN_PASSWORD="Admin@DocFlow2024!" \
+  --name docflow \
+  docflow-pro
+```
+
+### With Nginx reverse proxy
+
+Uncomment the nginx service in `docker-compose.yml` and add your SSL certs.
+
+---
+
+## ✨ Features
+
+### 🏠 Landing Page
+- Modern marketing page with hero, features, pricing, testimonials
+- Animated gradients and responsive layout
+- Built-in CTAs linking to the login / sign-up flow
+- "Created by Fazla Rabbi" in the footer
+
+### 🔐 Authentication
+- **NextAuth.js** JWT authentication — session-based, no database required
+- **Super admin** account seeded from environment variables
+- Bcrypt password hashing support for production
+- Protected routes via Next.js middleware
+- Sign out from the sidebar
+
+### 📄 Document Management
+- Rich-text editor (Tiptap v3) — bold, italic, tables, colors, links
+- List & grid views with search and status filters
+- One-click duplicate → opens straight in editor
+- Delete with confirmation modal
+- Document detail with recipients, signing progress, audit trail
+
+### ✍️ E-Signature Workflow
+- Send via email with recipient roles (Signer / Viewer / Approver)
+- Shareable link with optional expiry and password
+- Public signing page — no login required for recipients
+  - **Draw** on canvas
+  - **Type** in 4 font styles
+  - **Upload** signature image
+- ESIGN / eIDAS compliant with legal agreement checkbox
+
+### 📊 Dashboard & Analytics
+- Live stats pulled from Zustand store
+- Area chart (document activity), donut chart (pipeline status)
+- Activity feed, "needs attention" banner
+
+### ⚙️ Settings
+6 complete tabs: Profile · Workspace · Branding · Notifications · Security · Billing
+
+### 👥 Team Management
+- Member table with roles, status, docs sent
+- Role permissions matrix (Owner · Admin · Manager · Member · Viewer)
+- Invite modal with live permissions preview
+
+### 🔗 Integrations
+9 integrations: HubSpot, Stripe, Slack, Salesforce, Zapier, Google Drive, Pipedrive, Teams, QuickBooks
 
 ---
 
@@ -129,43 +216,37 @@ docflow/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/
-│   │   │   ├── login/page.tsx        # Login page
-│   │   │   └── register/page.tsx     # 2-step registration + plan picker
-│   │   ├── dashboard/page.tsx        # Live stats, charts, activity
+│   │   │   ├── login/page.tsx         # NextAuth login
+│   │   │   └── register/page.tsx      # 2-step registration
+│   │   ├── api/auth/[...nextauth]/    # NextAuth API route
+│   │   ├── page.tsx                   # Landing page
+│   │   ├── dashboard/page.tsx
 │   │   ├── documents/
-│   │   │   ├── page.tsx              # List/grid with CRUD actions
-│   │   │   └── [id]/page.tsx         # Document detail + audit trail
-│   │   ├── editor/[id]/page.tsx      # Tiptap rich-text editor
-│   │   ├── sign/[token]/page.tsx     # Public signing page (no auth)
-│   │   ├── analytics/page.tsx        # Charts, metrics, conversion
-│   │   ├── templates/page.tsx        # Template library
-│   │   ├── team/page.tsx             # Member management
-│   │   ├── integrations/page.tsx     # 9 integrations
-│   │   ├── settings/page.tsx         # 6-tab settings panel
-│   │   └── layout.tsx                # Root layout + toast container
+│   │   ├── editor/[id]/page.tsx
+│   │   ├── sign/[token]/page.tsx      # Public signing (no auth)
+│   │   ├── analytics/page.tsx
+│   │   ├── templates/page.tsx
+│   │   ├── team/page.tsx
+│   │   ├── integrations/page.tsx
+│   │   └── settings/page.tsx
 │   │
 │   ├── components/
-│   │   ├── layout/sidebar.tsx        # Sidebar + AppLayout + live search
-│   │   ├── dialogs/send-dialog.tsx   # Email + link share dialog
-│   │   ├── editor/toolbar.tsx        # Tiptap editor toolbar
-│   │   └── ui/
-│   │       ├── button.tsx            # Button with variants + loading
-│   │       ├── card.tsx              # Card + StatCard
-│   │       ├── badge.tsx             # StatusBadge
-│   │       ├── input.tsx             # Input, Textarea, Select
-│   │       ├── modal.tsx             # Modal, ModalBody, ModalFooter
-│   │       └── toast.tsx             # ToastContainer
+│   │   ├── providers.tsx              # SessionProvider wrapper
+│   │   ├── layout/sidebar.tsx         # Sidebar + sign out
+│   │   ├── dialogs/send-dialog.tsx
+│   │   └── ui/                        # button, card, modal, toast, input
 │   │
-│   ├── store/index.ts                # Zustand store (persisted)
 │   ├── lib/
-│   │   ├── mock-data.ts              # Seed documents, templates, activity
-│   │   └── utils.ts                  # cn(), formatRelative(), getInitials()
-│   └── types/index.ts                # Shared TypeScript types
+│   │   ├── auth.ts                    # NextAuth options + super admin
+│   │   └── mock-data.ts               # Chart seed data only
+│   ├── middleware.ts                   # Route protection
+│   └── store/index.ts                 # Zustand (starts empty)
 │
-├── tailwind.config.ts
-├── tsconfig.json
-├── next.config.js
-└── package.json
+├── .env.example                       # Template for env vars
+├── Dockerfile                         # Multi-stage production build
+├── docker-compose.yml
+├── vercel.json
+└── next.config.js                     # Standalone output for Docker
 ```
 
 ---
@@ -174,37 +255,27 @@ docflow/
 
 | Layer | Technology |
 |-------|-----------|
-| **Framework** | [Next.js 14](https://nextjs.org) — App Router, file-based routing |
-| **Language** | [TypeScript 5](https://www.typescriptlang.org) — strict mode |
-| **Styling** | [Tailwind CSS 3](https://tailwindcss.com) — utility-first |
-| **Editor** | [Tiptap v3](https://tiptap.dev) — headless rich-text |
-| **State** | [Zustand 5](https://zustand-demo.pmnd.rs) with `persist` middleware |
-| **Charts** | [Recharts 3](https://recharts.org) — AreaChart, BarChart, PieChart |
-| **Icons** | [Lucide React](https://lucide.dev) |
-| **Fonts** | Inter (Google Fonts) |
-
----
-
-## 📸 Screenshots
-
-| Dashboard | Documents | Editor |
-|-----------|-----------|--------|
-| Live stats, charts, activity feed | List & grid with search + filters | Tiptap editor with toolbar |
-
-| Sign Page | Settings | Team |
-|-----------|----------|------|
-| Draw / type / upload signature | 6-tab settings panel | Role management + invite |
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript 5 (strict) |
+| Styling | Tailwind CSS 3 |
+| Auth | NextAuth.js 4 (JWT + Credentials) |
+| Editor | Tiptap v3 |
+| State | Zustand 5 (persisted) |
+| Charts | Recharts 3 |
+| Icons | Lucide React |
+| Crypto | bcryptjs |
 
 ---
 
 ## 🗺 Roadmap
 
-- [ ] Real authentication (NextAuth.js or Clerk)
-- [ ] Database integration (PostgreSQL + Prisma)
-- [ ] PDF export with react-pdf
-- [ ] Real-time collaboration (WebSockets)
-- [ ] Email delivery (Resend / SendGrid)
+- [ ] PostgreSQL + Prisma (replace localStorage)
+- [ ] Multi-user support (invite-based registration)
+- [ ] Real email delivery (Resend / SendGrid)
+- [ ] PDF export (react-pdf)
 - [ ] Stripe billing integration
+- [ ] Real-time notifications (WebSockets)
+- [ ] OAuth providers (Google, GitHub)
 - [ ] Mobile app (React Native)
 
 ---
@@ -219,9 +290,7 @@ MIT License — free to use, modify, and distribute.
 
 **Created by [Fazla Rabbi](https://github.com/connectfazla)**
 
-*Built with ❤️ using Next.js, TypeScript & Tailwind CSS*
-
-<br />
+*Built with ❤️ using Next.js, TypeScript, Tailwind CSS & NextAuth.js*
 
 ⭐ **Star this repo if you find it useful!**
 

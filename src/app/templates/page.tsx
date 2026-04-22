@@ -7,7 +7,7 @@ import { TopBar } from '@/components/layout/sidebar'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { mockTemplates } from '@/lib/mock-data'
+import { useAppStore } from '@/store'
 import { formatDate, cn } from '@/lib/utils'
 
 const categories = ['All', 'Legal', 'Contracts', 'Sales', 'HR', 'Finance']
@@ -21,10 +21,11 @@ const categoryColors: Record<string, string> = {
 }
 
 export default function TemplatesPage() {
+  const { templates } = useAppStore()
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All')
 
-  const filtered = mockTemplates.filter(t => {
+  const filtered = templates.filter(t => {
     const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase()) ||
       t.description.toLowerCase().includes(search.toLowerCase())
     const matchesCategory = category === 'All' || t.category === category

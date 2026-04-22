@@ -10,7 +10,7 @@ node_modules/
 # production
 /build
 
-# env files
+# env files (keep .env.example committed)
 .env
 .env.local
 .env.development.local

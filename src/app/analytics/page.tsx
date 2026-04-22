@@ -3,7 +3,8 @@
 import { TopBar } from '@/components/layout/sidebar'
 import { Card, StatCard } from '@/components/ui/card'
 import { StatusBadge } from '@/components/ui/badge'
-import { mockDocuments, chartData, pipelineData } from '@/lib/mock-data'
+import { chartData, pipelineData } from '@/lib/mock-data'
+import { useAppStore } from '@/store'
 import { formatDate } from '@/lib/utils'
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -29,6 +30,8 @@ const teamData = [
 ]
 
 export default function AnalyticsPage() {
+  const { documents } = useAppStore()
+  const recentDocs = documents.slice(0, 5)
   return (
     <div className="animate-fade-in">
       <TopBar
