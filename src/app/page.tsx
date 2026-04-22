@@ -52,7 +52,7 @@ const plans = [
     desc: 'Perfect for freelancers and individuals.',
     features: ['5 documents / month', '3 templates', 'Basic e-signatures', 'Email support'],
     cta: 'Get started free',
-    href: '/login',
+    href: '/register',
     highlight: false,
   },
   {
@@ -62,7 +62,7 @@ const plans = [
     desc: 'Everything you need to grow your business.',
     features: ['Unlimited documents', 'Unlimited templates', 'Advanced analytics', 'Team collaboration', 'All integrations', 'Priority support'],
     cta: 'Start free trial',
-    href: '/login',
+    href: '/register',
     highlight: true,
     badge: 'Most Popular',
   },
@@ -73,7 +73,7 @@ const plans = [
     desc: 'For larger teams with advanced needs.',
     features: ['Everything in Pro', 'White-label branding', 'Custom domain', 'SSO / SAML', 'Dedicated CSM', 'SLA guarantee'],
     cta: 'Contact sales',
-    href: '/login',
+    href: '/register',
     highlight: false,
   },
 ]
@@ -136,7 +136,7 @@ export default function LandingPage() {
               Sign in
             </Link>
             <Link
-              href="/login"
+              href="/register"
               className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200"
             >
               Get started free
@@ -188,7 +188,7 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link
-              href="/login"
+              href="/register"
               className="flex items-center gap-2 px-8 py-4 bg-blue-600 text-white font-semibold rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 text-lg"
             >
               Start for free <ArrowRight className="w-5 h-5" />
@@ -489,7 +489,7 @@ export default function LandingPage() {
                 Join 50,000+ businesses that use DocFlow Pro to send and sign documents faster.
               </p>
               <Link
-                href="/login"
+                href="/register"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-700 font-bold rounded-2xl hover:bg-blue-50 transition-colors text-lg shadow-xl"
               >
                 Get started — it&apos;s free <ArrowRight className="w-5 h-5" />

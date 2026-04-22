@@ -100,10 +100,12 @@ function LoginForm() {
         </Button>
       </form>
 
-      <div className="mt-6 p-3 bg-slate-50 rounded-xl border border-slate-100">
-        <p className="text-xs text-slate-500 text-center">
-          🔐 Credentials are set via environment variables.<br />
-          Contact your system administrator for access.
+      <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+        <p className="text-sm text-slate-500">
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="text-blue-600 hover:text-blue-700 font-medium">
+            Create one free
+          </Link>
         </p>
       </div>
     </div>
