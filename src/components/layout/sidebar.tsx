@@ -24,6 +24,10 @@ const secondaryNav = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
+const adminNav = [
+  { name: 'Admin Console', href: '/admin', icon: Zap },
+]
+
 export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
@@ -169,6 +173,25 @@ export function Sidebar() {
             })}
           </div>
         </div>
+
+        {(((session?.user as any)?.role) === 'superadmin') && (
+          <div className="mt-6 pt-4 border-t border-slate-100">
+            <p className="px-3 mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">Admin</p>
+            {adminNav.map((item) => {
+              const isActive = pathname.startsWith(item.href)
+              return (
+                <Link key={item.name} href={item.href}
+                  className={cn(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                    isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                  )}>
+                  <item.icon style={{ width: 18, height: 18 }} className={cn('flex-shrink-0', isActive ? 'text-blue-600' : 'text-slate-400')} />
+                  {item.name}
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </nav>
 
       {/* User + Sign out */}

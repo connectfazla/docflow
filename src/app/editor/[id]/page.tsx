@@ -11,72 +11,40 @@ import { TextStyle } from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  ChevronLeft, Send, Download, Eye, Save, MoreHorizontal,
-  UserPlus, Clock, CheckCircle, Sparkles, X, PenTool, Plus,
-  FileText, Tag, Lock
+  ChevronLeft, Send, Save, Sparkles, X, PenTool, Plus,
+  FileText, CheckCircle, Loader2, Link as LinkIcon, Copy, Trash2,
 } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { EditorToolbar } from '@/components/editor/toolbar'
 import { Button } from '@/components/ui/button'
-import { StatusBadge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
 
-const INITIAL_CONTENT = `<h1>Software Development Agreement</h1>
-
-<p>This Software Development Agreement ("Agreement") is entered into as of <strong>April 22, 2026</strong>, between <strong>Acme Corp</strong> ("Client") and <strong>Dev Studio LLC</strong> ("Developer").</p>
-
-<h2>1. Scope of Work</h2>
-
-<p>Developer agrees to provide the following software development services:</p>
-
-<ul>
-  <li>Design and develop a web application according to the specifications provided by Client</li>
-  <li>Implement frontend and backend systems using modern, scalable technologies</li>
-  <li>Provide documentation for all developed features and APIs</li>
-  <li>Conduct code reviews and ensure code quality standards are met</li>
-</ul>
-
-<h2>2. Payment Terms</h2>
-
-<p>Client agrees to pay Developer the total sum of <strong>$24,000 USD</strong> according to the following milestone schedule:</p>
-
-<blockquote>
-  25% upon signing · 25% at midpoint review · 50% upon final delivery
-</blockquote>
-
-<h2>3. Intellectual Property</h2>
-
-<p>Upon receipt of full payment, all work product created by Developer under this Agreement shall become the exclusive property of Client, including all copyrights, patents, trade secrets, and other intellectual property rights.</p>
-
-<h2>4. Confidentiality</h2>
-
-<p>Both parties agree to maintain the confidentiality of each other's proprietary information and trade secrets during the term of this Agreement and for two (2) years thereafter.</p>
-
-<h2>5. Term and Termination</h2>
-
-<p>This Agreement commences on the date first written above and continues until project completion. Either party may terminate this Agreement with 30 days written notice.</p>
-
-<hr>
-
-<p><em>This Agreement constitutes the entire understanding between the parties and supersedes all prior negotiations, representations, or agreements.</em></p>`
-
-const recipientSample = [
-  { id: '1', name: 'Sarah Chen', email: 'sarah@client.com', role: 'Signer', color: 'from-blue-400 to-blue-600' },
-  { id: '2', name: 'David Park', email: 'david@client.com', role: 'Approver', color: 'from-violet-400 to-violet-600' },
-]
+type Recipient = { id?: string; name: string; email: string; role: 'signer' | 'viewer' | 'approver'; status?: string }
 
 export default function EditorPage() {
   const params = useParams()
   const router = useRouter()
-  const isNew = params.id === 'new'
+  const rawId = params.id as string
+  const isNew = rawId === 'new'
 
-  const [title, setTitle] = useState(isNew ? 'Untitled Document' : 'Software Development Agreement')
-  const [saved, setSaved] = useState(false)
+  const [docId, setDocId] = useState<string | null>(isNew ? null : rawId)
+  const [title, setTitle] = useState('Untitled Document')
+  const [loading, setLoading] = useState(!isNew)
+  const [saving, setSaving] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+  const [status, setStatus] = useState<string>('DRAFT')
+  const [shareUrl, setShareUrl] = useState<string | null>(null)
+
+  const [recipients, setRecipients] = useState<Recipient[]>([])
+  const [shareOpen, setShareOpen] = useState(false)
+  const [shareMessage, setShareMessage] = useState('')
+  const [sharing, setSharing] = useState(false)
+
   const [aiOpen, setAiOpen] = useState(false)
   const [aiPrompt, setAiPrompt] = useState('')
-  const [rightPanel, setRightPanel] = useState<'recipients' | 'fields' | null>('recipients')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState('')
 
   const editor = useEditor({
     extensions: [
@@ -88,295 +56,259 @@ export default function EditorPage() {
       Image,
       TextStyle,
       Color,
-      Placeholder.configure({ placeholder: 'Start writing your document...' }),
+      Placeholder.configure({ placeholder: 'Start writing your document…' }),
       Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
       TableCell,
     ],
-    content: isNew ? '' : INITIAL_CONTENT,
-    editorProps: {
-      attributes: {
-        class: 'tiptap-editor focus:outline-none min-h-full',
-      },
-    },
+    content: '',
+    editorProps: { attributes: { class: 'tiptap-editor focus:outline-none min-h-full' } },
     immediatelyRender: false,
   })
 
+  // Load existing doc
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (editor && !isNew) setSaved(true)
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [editor, isNew])
+    if (isNew || !editor) return
+    let cancel = false
+    ;(async () => {
+      const r = await fetch(`/api/documents/${rawId}`)
+      if (!r.ok) { router.push('/documents'); return }
+      const { document: d } = await r.json()
+      if (cancel) return
+      setTitle(d.title)
+      setStatus(d.status)
+      setRecipients(d.recipients ?? [])
+      if (d.shareToken) setShareUrl(`${window.location.origin}/sign/${d.shareToken}`)
+      editor.commands.setContent(d.content || '')
+      setLoading(false)
+    })()
+    return () => { cancel = true }
+  }, [isNew, rawId, editor, router])
 
+  // Save
+  const save = useCallback(async () => {
+    if (!editor) return
+    setSaving(true)
+    try {
+      const content = editor.getHTML()
+      if (!docId) {
+        const r = await fetch('/api/documents', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ title, content }),
+        })
+        const { document: d } = await r.json()
+        setDocId(d.id)
+        window.history.replaceState(null, '', `/editor/${d.id}`)
+      } else {
+        await fetch(`/api/documents/${docId}`, {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ title, content }),
+        })
+      }
+      setLastSaved(new Date())
+    } finally {
+      setSaving(false)
+    }
+  }, [editor, docId, title])
+
+  // Autosave debounced on edits
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => {
     if (!editor) return
-    const handler = () => setSaved(false)
-    editor.on('update', handler)
-    const autoSave = setInterval(() => setSaved(true), 30000)
-    return () => {
-      editor.off('update', handler)
-      clearInterval(autoSave)
+    const handler = () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current)
+      saveTimer.current = setTimeout(() => save(), 2000)
     }
-  }, [editor])
+    editor.on('update', handler)
+    return () => { editor.off('update', handler); if (saveTimer.current) clearTimeout(saveTimer.current) }
+  }, [editor, save])
+
+  // AI generate
+  const runAi = async () => {
+    if (!aiPrompt.trim() || !editor) return
+    setAiLoading(true); setAiError('')
+    try {
+      const r = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ prompt: aiPrompt, context: editor.getText().slice(0, 2000) }),
+      })
+      const d = await r.json()
+      if (!r.ok) { setAiError(d.error ?? 'AI failed'); return }
+      editor.chain().focus().insertContent(d.html).run()
+      setAiOpen(false); setAiPrompt('')
+    } catch (e: any) {
+      setAiError(e.message)
+    } finally { setAiLoading(false) }
+  }
+
+  // Share
+  const share = async () => {
+    if (!docId) await save()
+    if (!docId) return
+    setSharing(true)
+    try {
+      const clean = recipients.filter((r) => r.name.trim() && r.email.trim())
+      if (!clean.length) { alert('Add at least one recipient.'); return }
+      const r = await fetch(`/api/documents/${docId}/share`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ recipients: clean, message: shareMessage }),
+      })
+      const d = await r.json()
+      if (!r.ok) { alert(d.error ?? 'Share failed'); return }
+      setShareUrl(d.shareUrl)
+      setStatus('SENT')
+      setShareOpen(false)
+    } finally { setSharing(false) }
+  }
+
+  const addRecipient = () =>
+    setRecipients((rs) => [...rs, { name: '', email: '', role: 'signer' }])
 
   return (
-    <div className="flex flex-col h-screen bg-slate-100">
-      {/* Editor Header */}
-      <header className="flex items-center gap-4 px-4 py-3 bg-white border-b border-slate-200 z-20">
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Back
+    <div className="flex flex-col h-screen bg-[#f5f5f7]">
+      {/* Header — Apple-like glassy */}
+      <header className="flex items-center gap-4 px-5 py-3 bg-white/80 backdrop-blur-xl border-b border-black/[0.08] z-20">
+        <button onClick={() => router.push('/documents')} className="flex items-center gap-1.5 text-[13px] text-slate-600 hover:text-slate-900 transition-colors">
+          <ChevronLeft className="w-4 h-4" /> Documents
         </button>
 
         <div className="flex-1 flex items-center gap-3 min-w-0">
-          <div className="w-6 h-6 bg-blue-50 rounded-md flex items-center justify-center border border-blue-100 flex-shrink-0">
-            <FileText className="w-3.5 h-3.5 text-blue-600" />
-          </div>
+          <FileText className="w-4 h-4 text-slate-400 flex-shrink-0" />
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="flex-1 font-semibold text-slate-900 bg-transparent border-none outline-none text-base truncate min-w-0 placeholder:text-slate-400"
-            placeholder="Document title..."
+            onBlur={save}
+            className="flex-1 font-semibold text-slate-900 bg-transparent border-none outline-none text-[15px] tracking-tight truncate min-w-0 placeholder:text-slate-400"
+            placeholder="Untitled"
           />
-          {saved && (
-            <div className="flex items-center gap-1 text-xs text-slate-400 flex-shrink-0">
-              <CheckCircle className="w-3 h-3 text-emerald-500" />
-              Saved
-            </div>
-          )}
-          {!isNew && <StatusBadge status="draft" className="flex-shrink-0" />}
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 flex-shrink-0">
+            {saving ? (
+              <><Loader2 className="w-3 h-3 animate-spin" /> Saving…</>
+            ) : lastSaved ? (
+              <><CheckCircle className="w-3 h-3 text-emerald-500" /> Saved</>
+            ) : null}
+          </div>
+          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">{status}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setAiOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm bg-gradient-to-r from-violet-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-opacity font-medium"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            AI Assistant
+          <button onClick={() => setAiOpen(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-[13px] bg-gradient-to-r from-violet-500 to-blue-500 text-white rounded-full hover:opacity-90 font-medium transition-opacity">
+            <Sparkles className="w-3.5 h-3.5" /> AI
           </button>
-          <Button variant="outline" size="sm">
-            <Eye className="w-3.5 h-3.5" />
-            Preview
-          </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={save} disabled={saving}>
             <Save className="w-3.5 h-3.5" />
             Save
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setShareOpen(true)}>
             <Send className="w-3.5 h-3.5" />
-            Send
+            Share
           </Button>
-          <button className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
         </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Editor Area */}
         <div className="flex-1 overflow-y-auto">
           <EditorToolbar editor={editor} />
-
-          {/* Document Canvas */}
-          <div className="py-8 px-4 flex justify-center">
+          <div className="py-10 px-4 flex justify-center">
             <div className="w-full max-w-[816px]">
-              {/* Page */}
-              <div className="bg-white shadow-lg rounded-sm min-h-[1056px] relative" style={{ padding: '72px 80px' }}>
-                {/* Header decoration */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 to-violet-500 rounded-t-sm" />
-
+              <div className="bg-white shadow-sm rounded-2xl min-h-[1056px] relative" style={{ padding: '72px 80px' }}>
                 <EditorContent editor={editor} className="min-h-full" />
-
-                {/* Signature fields (visual) */}
-                {!isNew && (
-                  <div className="mt-12 pt-8 border-t-2 border-dashed border-slate-200">
-                    <div className="grid grid-cols-2 gap-8">
-                      {recipientSample.map((r) => (
-                        <div key={r.id} className="space-y-2">
-                          <div className="h-14 border-b-2 border-slate-300 relative flex items-end pb-2">
-                            <div className="absolute top-1 left-1 flex items-center gap-1.5">
-                              <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${r.color} flex items-center justify-center`}>
-                                <PenTool className="w-2.5 h-2.5 text-white" />
-                              </div>
-                              <span className="text-xs text-slate-400">{r.role}</span>
-                            </div>
-                            <div className="text-slate-300 text-xs font-medium">Click to sign</div>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-slate-800">{r.name}</p>
-                            <p className="text-xs text-slate-400">{r.email}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                {loading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/80">
+                    <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
                   </div>
                 )}
               </div>
-
-              <p className="text-center text-xs text-slate-400 mt-4">Page 1 of 1</p>
+              <p className="text-center text-xs text-slate-400 mt-4">Autosaves every 2 seconds</p>
             </div>
           </div>
         </div>
-
-        {/* Right Panel */}
-        {rightPanel && (
-          <div className="w-72 bg-white border-l border-slate-200 flex flex-col">
-            {/* Panel Tabs */}
-            <div className="flex border-b border-slate-200">
-              {[
-                { id: 'recipients', label: 'Recipients', icon: UserPlus },
-                { id: 'fields', label: 'Fields', icon: Tag },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setRightPanel(tab.id as 'recipients' | 'fields')}
-                  className={cn(
-                    'flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-medium transition-colors border-b-2',
-                    rightPanel === tab.id
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-slate-500 hover:text-slate-700'
-                  )}
-                >
-                  <tab.icon className="w-3.5 h-3.5" />
-                  {tab.label}
-                </button>
-              ))}
-              <button
-                onClick={() => setRightPanel(null)}
-                className="px-3 py-3 text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {rightPanel === 'recipients' && (
-              <div className="flex-1 overflow-y-auto p-4">
-                <p className="text-xs text-slate-500 mb-4">Add people who need to sign or review this document.</p>
-
-                <div className="space-y-3 mb-4">
-                  {recipientSample.map((r, i) => (
-                    <div key={r.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                      <div className={`w-8 h-8 bg-gradient-to-br ${r.color} rounded-full flex items-center justify-center flex-shrink-0`}>
-                        <span className="text-white text-xs font-bold">{r.name[0]}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate">{r.name}</p>
-                        <p className="text-xs text-slate-400 truncate">{r.email}</p>
-                      </div>
-                      <span className={cn(
-                        'text-xs font-medium px-2 py-0.5 rounded-full',
-                        r.role === 'Signer' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'
-                      )}>
-                        {r.role}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <button className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 hover:border-blue-300 hover:text-blue-500 transition-all">
-                  <Plus className="w-4 h-4" />
-                  Add Recipient
-                </button>
-
-                <div className="mt-6 p-3 bg-amber-50 rounded-xl border border-amber-100">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Clock className="w-3.5 h-3.5 text-amber-600" />
-                    <span className="text-xs font-semibold text-amber-800">Signing Order</span>
-                  </div>
-                  <p className="text-xs text-amber-700">Recipients will sign in the order listed above.</p>
-                </div>
-              </div>
-            )}
-
-            {rightPanel === 'fields' && (
-              <div className="flex-1 overflow-y-auto p-4">
-                <p className="text-xs text-slate-500 mb-4">Drag fields onto the document to collect information.</p>
-
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: 'Signature', icon: PenTool, color: 'blue' },
-                    { label: 'Initials', icon: Tag, color: 'violet' },
-                    { label: 'Date', icon: Clock, color: 'emerald' },
-                    { label: 'Text', icon: FileText, color: 'amber' },
-                    { label: 'Checkbox', icon: CheckCircle, color: 'slate' },
-                    { label: 'Dropdown', icon: ChevronLeft, color: 'rose' },
-                  ].map((field) => (
-                    <div
-                      key={field.label}
-                      draggable
-                      className="flex flex-col items-center gap-1.5 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 cursor-grab hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-all active:cursor-grabbing"
-                    >
-                      <field.icon className="w-4 h-4" />
-                      {field.label}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-5">
-                  <p className="text-xs font-semibold text-slate-700 mb-2">Smart Variables</p>
-                  <div className="space-y-1.5">
-                    {['{{client_name}}', '{{contract_date}}', '{{total_amount}}', '{{company_name}}'].map((v) => (
-                      <div key={v} className="flex items-center justify-between px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:border-blue-300 transition-colors">
-                        <code className="text-xs text-blue-600 font-mono">{v}</code>
-                        <Plus className="w-3 h-3 text-slate-400" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Right panel toggle (when closed) */}
-        {!rightPanel && (
-          <div className="flex flex-col gap-2 p-2 bg-white border-l border-slate-200">
-            <button
-              onClick={() => setRightPanel('recipients')}
-              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              title="Recipients"
-            >
-              <UserPlus className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setRightPanel('fields')}
-              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              title="Fields"
-            >
-              <Tag className="w-4 h-4" />
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* AI Assistant Modal */}
+      {/* Share dialog */}
+      {shareOpen && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.06]">
+              <h2 className="font-semibold text-slate-900 tracking-tight">Share &amp; request signatures</h2>
+              <button onClick={() => setShareOpen(false)} className="text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-[12px] font-medium text-slate-600 mb-1.5">Recipients</label>
+                <div className="space-y-2">
+                  {recipients.map((r, i) => (
+                    <div key={i} className="grid grid-cols-[1fr_1fr_110px_auto] gap-2">
+                      <input value={r.name} onChange={(e) => setRecipients((rs) => rs.map((x, j) => j === i ? { ...x, name: e.target.value } : x))}
+                        placeholder="Full name" className="rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      <input value={r.email} onChange={(e) => setRecipients((rs) => rs.map((x, j) => j === i ? { ...x, email: e.target.value } : x))}
+                        placeholder="email@company.com" className="rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                      <select value={r.role} onChange={(e) => setRecipients((rs) => rs.map((x, j) => j === i ? { ...x, role: e.target.value as any } : x))}
+                        className="rounded-xl border border-slate-200 px-2 py-2 text-sm">
+                        <option value="signer">Signer</option>
+                        <option value="viewer">Viewer</option>
+                        <option value="approver">Approver</option>
+                      </select>
+                      <button onClick={() => setRecipients((rs) => rs.filter((_, j) => j !== i))} className="p-2 text-slate-400 hover:text-red-600"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={addRecipient} className="mt-2 inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700">
+                  <Plus className="w-3.5 h-3.5" /> Add recipient
+                </button>
+              </div>
+
+              <div>
+                <label className="block text-[12px] font-medium text-slate-600 mb-1.5">Message (optional)</label>
+                <textarea value={shareMessage} onChange={(e) => setShareMessage(e.target.value)} rows={3}
+                  placeholder="Hi — please review and sign by Friday…"
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+
+              {shareUrl && (
+                <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 flex items-center gap-2">
+                  <LinkIcon className="w-4 h-4 text-slate-400" />
+                  <input readOnly value={shareUrl} className="flex-1 bg-transparent text-xs text-slate-600 outline-none" />
+                  <button onClick={() => navigator.clipboard.writeText(shareUrl)} className="text-xs text-blue-600 flex items-center gap-1"><Copy className="w-3 h-3" /> Copy</button>
+                </div>
+              )}
+            </div>
+
+            <div className="px-6 py-4 border-t border-black/[0.06] flex items-center justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => setShareOpen(false)}>Cancel</Button>
+              <Button size="sm" onClick={share} disabled={sharing}>
+                {sharing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                Send & create share link
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI dialog */}
       {aiOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-black/[0.06]">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-blue-500 rounded-lg flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-slate-900 text-sm">AI Document Assistant</h2>
-                  <p className="text-xs text-slate-400">Powered by Claude</p>
+                  <h2 className="font-semibold text-slate-900 text-[15px] tracking-tight">AI Document Assistant</h2>
+                  <p className="text-[11px] text-slate-400">Uses the API key configured by your admin</p>
                 </div>
               </div>
-              <button onClick={() => setAiOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                <X className="w-4 h-4" />
-              </button>
+              <button onClick={() => setAiOpen(false)} className="text-slate-400 hover:text-slate-600"><X className="w-4 h-4" /></button>
             </div>
 
             <div className="p-6">
-              <p className="text-sm text-slate-600 mb-4">Describe what you need and AI will generate or improve your document.</p>
-
               <div className="grid grid-cols-2 gap-2 mb-4">
                 {[
                   'Write an NDA for a software partnership',
@@ -384,27 +316,20 @@ export default function EditorPage() {
                   'Improve the IP ownership section',
                   'Generate a services scope section',
                 ].map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    onClick={() => setAiPrompt(suggestion)}
-                    className="text-left text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all text-slate-600 hover:text-blue-600"
-                  >
+                  <button key={suggestion} onClick={() => setAiPrompt(suggestion)}
+                    className="text-left text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-slate-600 hover:text-blue-600">
                     {suggestion}
                   </button>
                 ))}
               </div>
-
-              <textarea
-                value={aiPrompt}
-                onChange={(e) => setAiPrompt(e.target.value)}
-                placeholder="Describe what you want to generate or change..."
-                className="w-full h-24 text-sm border border-slate-200 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
-              />
-
+              <textarea value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)}
+                placeholder="Describe what to generate or modify…"
+                className="w-full h-24 text-sm border border-slate-200 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              {aiError && <p className="text-sm text-red-600 mt-2">{aiError}</p>}
               <div className="flex items-center justify-end gap-2 mt-4">
                 <Button variant="outline" size="sm" onClick={() => setAiOpen(false)}>Cancel</Button>
-                <Button size="sm" onClick={() => setAiOpen(false)}>
-                  <Sparkles className="w-3.5 h-3.5" />
+                <Button size="sm" onClick={runAi} disabled={aiLoading}>
+                  {aiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
                   Generate
                 </Button>
               </div>

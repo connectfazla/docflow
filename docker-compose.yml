@@ -1,40 +1,52 @@
 version: '3.9'
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: docflow-postgres
+    environment:
+      POSTGRES_USER: docflow
+      POSTGRES_PASSWORD: docflow
+      POSTGRES_DB: docflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - docflow-pg-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   docflow:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: docflow-pro
     ports:
-      - "3000:3000"
+      - "3219:3219"
     environment:
       - NODE_ENV=production
-      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - PORT=3219
+      - HOSTNAME=0.0.0.0
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3219}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@docflow.pro}
       - ADMIN_NAME=${ADMIN_NAME:-Super Admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      # Uncomment to use bcrypt hash instead of plain password:
-      # - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}
+      - APP_ENCRYPTION_KEY=${APP_ENCRYPTION_KEY}
+      - DATABASE_URL=postgresql://docflow:docflow@postgres:5432/docflow?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/auth/providers"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3219/api/auth/providers"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # Optional: Nginx reverse proxy
-  # nginx:
-  #   image: nginx:alpine
-  #   container_name: docflow-nginx
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
-  #     - /etc/letsencrypt:/etc/letsencrypt:ro
-  #   depends_on:
-  #     - docflow
-  #   restart: unless-stopped
+volumes:
+  docflow-pg-data:

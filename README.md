@@ -1,297 +1,135 @@
-<div align="center">
+# DocFlow Pro
 
-<img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js&logoColor=white" />
-<img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-<img src="https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-<img src="https://img.shields.io/badge/NextAuth.js-4-purple?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Docker-ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
-<img src="https://img.shields.io/badge/Vercel-ready-black?style=for-the-badge&logo=vercel&logoColor=white" />
+A high-end SaaS document automation platform — prepare, send, and e-sign
+business documents with a clean Apple-inspired UI. Backed by PostgreSQL,
+NextAuth, and a full super-admin console for SMTP, AI, payments and plans.
 
-<br /><br />
+## Stack
 
-# 🖊 DocFlow Pro
+- **Next.js 14** (App Router, standalone output)
+- **PostgreSQL 16** via **Prisma 5**
+- **NextAuth v4** (JWT, Credentials provider, role-gated routes)
+- **Tiptap 3** rich-text editor
+- **Stripe** + **Ziina** payment providers (toggleable, free-tier by default)
+- **OpenAI / Anthropic** AI content generation (API key managed in admin console)
+- **Nodemailer** SMTP (configured from admin console, dev console fallback)
+- **Tailwind CSS** + Apple design tokens (see `DESIGN.md`)
+- **Zustand** client state with API hydration
 
-### The all-in-one document automation platform — create, send, track & e-sign documents.
+## Port
 
-*Production-ready · NextAuth super admin · Vercel & Docker deploy · Zero demo data*
+The app runs on **port 3219** (not 3000). This is baked into the dev/start
+scripts, `.env.local`, Docker compose, and VS Code launch config.
 
-<br />
-
-[🚀 Quick Start](#-quick-start) · [🔐 Super Admin](#-super-admin) · [☁️ Deploy to Vercel](#️-deploy-to-vercel) · [🐳 Deploy with Docker](#-deploy-with-docker) · [✨ Features](#-features)
-
-<br />
-
----
-
-</div>
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js **18+**
-- npm or yarn
+## Quick start
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/connectfazla/docflow.git
-cd docflow
-
-# 2. Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your credentials (see Super Admin section)
-
-# 3. Install dependencies
+# 1. Install dependencies
 npm install
 
-# 4. Start the dev server
-npm run dev
-```
+# 2. Start local Postgres (any of)
+#    - brew services start postgresql@16
+#    - docker compose up -d postgres
 
-Open [http://localhost:3000](http://localhost:3000) — you'll see the landing page.  
-Sign in at [http://localhost:3000/login](http://localhost:3000/login) with your admin credentials.
-
----
-
-## 🔐 Super Admin
-
-All admin credentials are configured via **environment variables** — no hardcoded passwords, no database needed.
-
-### Required `.env.local`
-
-```env
-# Generate with: openssl rand -base64 32
-NEXTAUTH_SECRET=your-super-secret-key-here
-
-NEXTAUTH_URL=http://localhost:3000    # Change to your domain in production
-
-ADMIN_EMAIL=admin@docflow.pro         # Admin login email
-ADMIN_NAME=Super Admin                # Admin display name
-ADMIN_PASSWORD=Admin@DocFlow2024!     # Admin password (dev)
-```
-
-### Secure Password Hash (Production recommended)
-
-For production, use a bcrypt hash instead of a plain password:
-
-```bash
-# Generate a hash
-node -e "const b=require('bcryptjs'); b.hash('YourStrongPassword!',12).then(console.log)"
-
-# Add to .env.local
-ADMIN_PASSWORD_HASH=$2a$12$...your-hash-here...
-# Remove ADMIN_PASSWORD when using hash
-```
-
-### Default Dev Credentials
-| Field | Value |
-|-------|-------|
-| Email | `admin@docflow.pro` |
-| Password | `Admin@DocFlow2024!` |
-
-> ⚠️ **Change these immediately in any production deployment.**
-
----
-
-## ☁️ Deploy to Vercel
-
-The easiest deployment option — one click and you're live.
-
-### Option A: Vercel CLI
-
-```bash
-npm install -g vercel
-vercel --prod
-```
-
-### Option B: Vercel Dashboard
-
-1. Push this repo to GitHub *(already done)*
-2. Go to [vercel.com/new](https://vercel.com/new) → Import from GitHub
-3. Select `connectfazla/docflow`
-4. Add environment variables in the Vercel dashboard:
-
-| Variable | Value |
-|----------|-------|
-| `NEXTAUTH_SECRET` | `openssl rand -base64 32` output |
-| `NEXTAUTH_URL` | `https://your-app.vercel.app` |
-| `ADMIN_EMAIL` | your admin email |
-| `ADMIN_NAME` | your name |
-| `ADMIN_PASSWORD` | strong password (or use `ADMIN_PASSWORD_HASH`) |
-
-5. Click **Deploy** ✓
-
----
-
-## 🐳 Deploy with Docker
-
-### Quick start
-
-```bash
-# Copy and configure env
+# 3. Configure env
 cp .env.example .env.local
-nano .env.local   # Set your credentials
+# Edit DATABASE_URL, NEXTAUTH_SECRET, APP_ENCRYPTION_KEY, ADMIN_EMAIL, ADMIN_PASSWORD
 
-# Build and run
-docker-compose up -d
+# 4. Push schema + seed templates & plans
+set -a && source .env.local && set +a
+npx prisma db push
+npm run db:seed
 
-# App is live at http://localhost:3000
+# 5. Run
+npm run dev
+# → http://localhost:3219
 ```
 
-### Manual Docker build
+## Required environment variables
+
+| Key | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Postgres connection string |
+| `NEXTAUTH_SECRET` | JWT signing secret |
+| `NEXTAUTH_URL` | Public URL (e.g. `http://localhost:3219`) |
+| `APP_ENCRYPTION_KEY` | AES-256-GCM key for settings-at-rest (32+ chars) |
+| `ADMIN_EMAIL` | Super-admin email (upserted on every boot) |
+| `ADMIN_PASSWORD` | Super-admin password |
+| `ADMIN_NAME` | Display name for the super admin |
+
+## Super-admin console
+
+Visit `/admin` while signed in as super-admin. Modules:
+
+- **Overview** — at-a-glance integration readiness
+- **SMTP** — host/port/user/password + Send test email
+- **AI** — provider (openai/anthropic), API key, default model
+- **Payments** — active provider toggle (free/stripe/ziina) + credentials
+- **Plans** — CRUD pricing plans (price, features, doc/team limits, Stripe price ID)
+- **Users** — role + plan management, delete
+- **Branding** — company name, support email
+
+All secrets are AES-256-GCM encrypted at rest; API responses mask the value
+with `••••1234` so forms never round-trip the plaintext.
+
+## Document flow
+
+1. Create a doc from a **template** (`/templates` — 50+ prebuilt) or from blank
+2. Edit in Tiptap; autosaves every 2 s to Postgres
+3. Click **Share** — add recipients, send link, email delivered via SMTP
+4. Recipient opens `/sign/{token}`, draws signature, submits
+5. When all recipients sign, document status flips to `COMPLETED`
+
+## Security posture
+
+- Passwords hashed with bcryptjs (12 rounds)
+- Settings encrypted (AES-256-GCM) via `APP_ENCRYPTION_KEY`
+- HTML sanitized server-side with DOMPurify before rendering `/sign` content
+- Stripe webhook signature verified via official SDK
+- Ziina webhook HMAC-SHA256 verified
+- Rate limiting on `/api/auth/register` (5/hr/IP) and `/api/share/[token]` POST (10/min/IP)
+- Security headers: HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+- Role-gated middleware on `/admin/*` (super-admin only)
+- Signature submissions validated for data URL shape and size (≤ ~2 MB)
+- Audit log (IP + user-agent) on sensitive actions
+
+## Docker
 
 ```bash
-# Build the image
-docker build -t docflow-pro .
-
-# Run with env vars
-docker run -d \
-  -p 3000:3000 \
-  -e NEXTAUTH_SECRET="your-secret" \
-  -e NEXTAUTH_URL="http://localhost:3000" \
-  -e ADMIN_EMAIL="admin@docflow.pro" \
-  -e ADMIN_PASSWORD="Admin@DocFlow2024!" \
-  --name docflow \
-  docflow-pro
+docker compose up -d
 ```
 
-### With Nginx reverse proxy
+Spins up postgres:16 and the app container on port 3219.
 
-Uncomment the nginx service in `docker-compose.yml` and add your SSL certs.
+## Scripts
 
----
+- `npm run dev` — dev server on :3219
+- `npm run build` — Prisma generate + Next build
+- `npm run start` — production server on :3219
+- `npm run db:push` — sync schema to DB
+- `npm run db:studio` — Prisma Studio
+- `npm run db:seed` — seed plans + 50+ templates
 
-## ✨ Features
-
-### 🏠 Landing Page
-- Modern marketing page with hero, features, pricing, testimonials
-- Animated gradients and responsive layout
-- Built-in CTAs linking to the login / sign-up flow
-- "Created by Fazla Rabbi" in the footer
-
-### 🔐 Authentication
-- **NextAuth.js** JWT authentication — session-based, no database required
-- **Super admin** account seeded from environment variables
-- Bcrypt password hashing support for production
-- Protected routes via Next.js middleware
-- Sign out from the sidebar
-
-### 📄 Document Management
-- Rich-text editor (Tiptap v3) — bold, italic, tables, colors, links
-- List & grid views with search and status filters
-- One-click duplicate → opens straight in editor
-- Delete with confirmation modal
-- Document detail with recipients, signing progress, audit trail
-
-### ✍️ E-Signature Workflow
-- Send via email with recipient roles (Signer / Viewer / Approver)
-- Shareable link with optional expiry and password
-- Public signing page — no login required for recipients
-  - **Draw** on canvas
-  - **Type** in 4 font styles
-  - **Upload** signature image
-- ESIGN / eIDAS compliant with legal agreement checkbox
-
-### 📊 Dashboard & Analytics
-- Live stats pulled from Zustand store
-- Area chart (document activity), donut chart (pipeline status)
-- Activity feed, "needs attention" banner
-
-### ⚙️ Settings
-6 complete tabs: Profile · Workspace · Branding · Notifications · Security · Billing
-
-### 👥 Team Management
-- Member table with roles, status, docs sent
-- Role permissions matrix (Owner · Admin · Manager · Member · Viewer)
-- Invite modal with live permissions preview
-
-### 🔗 Integrations
-9 integrations: HubSpot, Stripe, Slack, Salesforce, Zapier, Google Drive, Pipedrive, Teams, QuickBooks
-
----
-
-## 🗂 Project Structure
+## Project layout
 
 ```
-docflow/
-├── src/
-│   ├── app/
-│   │   ├── (auth)/
-│   │   │   ├── login/page.tsx         # NextAuth login
-│   │   │   └── register/page.tsx      # 2-step registration
-│   │   ├── api/auth/[...nextauth]/    # NextAuth API route
-│   │   ├── page.tsx                   # Landing page
-│   │   ├── dashboard/page.tsx
-│   │   ├── documents/
-│   │   ├── editor/[id]/page.tsx
-│   │   ├── sign/[token]/page.tsx      # Public signing (no auth)
-│   │   ├── analytics/page.tsx
-│   │   ├── templates/page.tsx
-│   │   ├── team/page.tsx
-│   │   ├── integrations/page.tsx
-│   │   └── settings/page.tsx
-│   │
-│   ├── components/
-│   │   ├── providers.tsx              # SessionProvider wrapper
-│   │   ├── layout/sidebar.tsx         # Sidebar + sign out
-│   │   ├── dialogs/send-dialog.tsx
-│   │   └── ui/                        # button, card, modal, toast, input
-│   │
-│   ├── lib/
-│   │   ├── auth.ts                    # NextAuth options + super admin
-│   │   └── mock-data.ts               # Chart seed data only
-│   ├── middleware.ts                   # Route protection
-│   └── store/index.ts                 # Zustand (starts empty)
-│
-├── .env.example                       # Template for env vars
-├── Dockerfile                         # Multi-stage production build
-├── docker-compose.yml
-├── vercel.json
-└── next.config.js                     # Standalone output for Docker
+prisma/schema.prisma         # DB schema
+prisma/seed.ts               # Plans + templates
+src/app/                     # App Router pages + API routes
+src/app/admin/*              # Super-admin console
+src/app/api/admin/*          # Admin APIs
+src/app/api/documents/*      # Document CRUD + share
+src/app/api/share/[token]    # Public sign endpoint
+src/app/api/webhooks/*       # Stripe + Ziina webhooks
+src/lib/db.ts                # Prisma client
+src/lib/auth.ts              # NextAuth config + role guards
+src/lib/crypto.ts            # AES-256-GCM helpers
+src/lib/settings.ts          # Encrypted settings store
+src/lib/mailer.ts            # Nodemailer from DB settings
+src/lib/payments.ts          # Stripe + Ziina providers
+src/lib/sanitize.ts          # DOMPurify wrapper
+src/lib/rate-limit.ts        # In-memory rate limiter
+src/lib/audit.ts             # AuditLog writer
 ```
 
----
-
-## 🛠 Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 14 (App Router) |
-| Language | TypeScript 5 (strict) |
-| Styling | Tailwind CSS 3 |
-| Auth | NextAuth.js 4 (JWT + Credentials) |
-| Editor | Tiptap v3 |
-| State | Zustand 5 (persisted) |
-| Charts | Recharts 3 |
-| Icons | Lucide React |
-| Crypto | bcryptjs |
-
----
-
-## 🗺 Roadmap
-
-- [ ] PostgreSQL + Prisma (replace localStorage)
-- [ ] Multi-user support (invite-based registration)
-- [ ] Real email delivery (Resend / SendGrid)
-- [ ] PDF export (react-pdf)
-- [ ] Stripe billing integration
-- [ ] Real-time notifications (WebSockets)
-- [ ] OAuth providers (Google, GitHub)
-- [ ] Mobile app (React Native)
-
----
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
-
----
-
-<div align="center">
-
-**Created by [Fazla Rabbi](https://github.com/connectfazla)**
-
-*Built with ❤️ using Next.js, TypeScript, Tailwind CSS & NextAuth.js*
-
-⭐ **Star this repo if you find it useful!**
-
-</div>
+See `progress.md` for a detailed changelog of the SaaS-grade upgrade work.

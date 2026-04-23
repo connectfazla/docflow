@@ -3,6 +3,13 @@ import { NextResponse } from 'next/server'
 
 export default withAuth(
   function middleware(req) {
+    // Enforce superadmin for the /admin console
+    if (req.nextUrl.pathname.startsWith('/admin')) {
+      const role = (req.nextauth?.token as any)?.role
+      if (role !== 'superadmin') {
+        return NextResponse.redirect(new URL('/dashboard', req.url))
+      }
+    }
     return NextResponse.next()
   },
   {
@@ -12,7 +19,7 @@ export default withAuth(
   }
 )
 
-// Protect all app routes — leave landing, login, register, sign pages public
+// Protect app routes — leave landing, login, register, sign/[token] public
 export const config = {
   matcher: [
     '/dashboard/:path*',
@@ -23,5 +30,6 @@ export const config = {
     '/team/:path*',
     '/integrations/:path*',
     '/settings/:path*',
+    '/admin/:path*',
   ],
 }

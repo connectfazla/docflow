@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Search, Plus, Star, Lock, FileText, Clock, TrendingUp, Sparkles } from 'lucide-react'
+import { Search, Plus, Star, Lock, FileText, Clock, TrendingUp, Sparkles, Loader2 } from 'lucide-react'
 import { TopBar } from '@/components/layout/sidebar'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -10,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/store'
 import { formatDate, cn } from '@/lib/utils'
 
-const categories = ['All', 'Legal', 'Contracts', 'Sales', 'HR', 'Finance']
+const categories = ['All', 'Legal', 'Sales', 'Marketing Agency', 'HR', 'Real Estate', 'Tech', 'Finance']
 
 const categoryColors: Record<string, string> = {
   Legal: 'bg-purple-50 text-purple-700',
@@ -22,8 +23,19 @@ const categoryColors: Record<string, string> = {
 
 export default function TemplatesPage() {
   const { templates } = useAppStore()
+  const router = useRouter()
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All')
+  const [using, setUsing] = useState<string | null>(null)
+
+  const useTemplate = async (id: string) => {
+    setUsing(id)
+    try {
+      const r = await fetch(`/api/templates/${id}/use`, { method: 'POST' })
+      const d = await r.json()
+      if (r.ok && d.document) router.push(`/editor/${d.document.id}`)
+    } finally { setUsing(null) }
+  }
 
   const filtered = templates.filter(t => {
     const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -140,7 +152,14 @@ export default function TemplatesPage() {
                       {formatDate(template.updatedAt)}
                     </span>
                   </div>
-                  <Button variant="outline" size="sm" className="text-xs h-7">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-7"
+                    onClick={() => useTemplate(template.id)}
+                    disabled={using === template.id}
+                  >
+                    {using === template.id ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
                     Use Template
                   </Button>
                 </div>
