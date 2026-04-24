@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { getSettings } from '@/lib/settings'
 import { maskSecret } from '@/lib/crypto'
 import { PaymentsForm } from './client'

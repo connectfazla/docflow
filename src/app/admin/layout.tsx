@@ -4,6 +4,9 @@ import { authOptions, isSuperAdmin } from '@/lib/auth'
 import Link from 'next/link'
 import { Settings, Mail, CreditCard, Sparkles, Users, Shield, ArrowLeft } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions)
   if (!isSuperAdmin((session?.user as any)?.role)) redirect('/dashboard')
