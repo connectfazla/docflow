@@ -4,7 +4,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps --ignore-scripts
 
 # ── Stage 2: Builder ───────────────────────────────────────────
 FROM node:20-alpine AS builder
@@ -13,9 +13,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Generate Prisma client now that schema is available
+RUN npx prisma generate
+
 # Set dummy secrets for build (real ones injected at runtime)
 ENV NEXTAUTH_SECRET=build-time-placeholder
-ENV NEXTAUTH_URL=http://localhost:3000
+ENV NEXTAUTH_URL=http://localhost:3219
 ENV ADMIN_EMAIL=admin@docflow.pro
 ENV ADMIN_PASSWORD=placeholder
 ENV NEXT_TELEMETRY_DISABLED=1
