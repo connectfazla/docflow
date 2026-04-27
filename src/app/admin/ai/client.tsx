@@ -2,10 +2,20 @@
 import { SettingForm } from '@/components/admin/setting-form'
 
 export function SettingFormClient({ initial }: { initial: Record<string, string> }) {
+  const testAi = async (values: Record<string, string>) => {
+    const res = await fetch('/api/admin/ai-test', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(values),
+    })
+    const d = await res.json()
+    return { ok: d.ok, error: d.error }
+  }
+
   return (
     <SettingForm
       title="AI Integration"
-      description="Connect an OpenAI or Anthropic API key to enable AI-powered document generation throughout the app. Keys are encrypted at rest."
+      description="Connect an OpenAI, Anthropic, or Kimi API key to enable AI-powered document generation. Keys are encrypted at rest."
       fields={[
         {
           key: 'ai.provider', label: 'Provider', type: 'select',
@@ -16,10 +26,19 @@ export function SettingFormClient({ initial }: { initial: Record<string, string>
           ],
           hint: 'Pick the provider that matches your API key.',
         },
-        { key: 'ai.apiKey', label: 'API Key', type: 'password', placeholder: 'sk-…', hint: 'Stored encrypted. Leave unchanged to keep existing key.' },
-        { key: 'ai.model', label: 'Model (optional)', placeholder: 'gpt-4o-mini / claude-3-5-sonnet-latest / moonshot-v1-8k', hint: 'Defaults: gpt-4o-mini · claude-3-5-sonnet-latest · moonshot-v1-8k' },
+        {
+          key: 'ai.apiKey', label: 'API Key', type: 'password',
+          placeholder: 'sk-…',
+          hint: 'Stored encrypted. Leave unchanged to keep existing key.',
+        },
+        {
+          key: 'ai.model', label: 'Model (optional)',
+          placeholder: 'gpt-4o-mini / claude-3-5-sonnet-latest / moonshot-v1-8k',
+          hint: 'Defaults: gpt-4o-mini · claude-3-5-sonnet-latest · moonshot-v1-8k',
+        },
       ]}
       initialValues={initial}
+      onTest={testAi}
     />
   )
 }
