@@ -115,25 +115,67 @@ const templates = [
   t('Mutual Non-Disclosure Agreement',
     'Two-way NDA protecting confidential information shared between two parties.',
     'Legal', ['nda', 'confidentiality'],
-    `<p>This Mutual Non-Disclosure Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> by and between <strong>{{party_a}}</strong>, a company organised under the laws of <strong>{{party_a_jurisdiction}}</strong> (<strong>"Party A"</strong>), and <strong>{{party_b}}</strong>, a company organised under the laws of <strong>{{party_b_jurisdiction}}</strong> (<strong>"Party B"</strong>) (together, the <strong>"Parties"</strong>).</p>
+    `<p>This Mutual Non-Disclosure Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> (the <strong>"Effective Date"</strong>) by and between:</p>
+
+<p><strong>{{party_a_name}}</strong>, a {{party_a_entity_type}} organised under the laws of {{party_a_jurisdiction}}, with its principal place of business at {{party_a_address}} (<strong>"Party A"</strong>); and</p>
+
+<p><strong>{{party_b_name}}</strong>, a {{party_b_entity_type}} organised under the laws of {{party_b_jurisdiction}}, with its principal place of business at {{party_b_address}} (<strong>"Party B"</strong>).</p>
+
+<p>Party A and Party B are each referred to herein as a <strong>"Party"</strong> and collectively as the <strong>"Parties."</strong></p>
 
 <h2>1. Purpose</h2>
-<p>The Parties wish to explore a potential business relationship (the <strong>"Purpose"</strong>) and may disclose confidential information to each other in connection with the Purpose.</p>
+<p>The Parties wish to explore a potential business relationship concerning <strong>{{purpose}}</strong> (the <strong>"Purpose"</strong>). In connection with the Purpose, each Party (as a <strong>"Disclosing Party"</strong>) may disclose certain confidential and proprietary information to the other Party (as a <strong>"Receiving Party"</strong>).</p>
 
-<h2>2. Definition of Confidential Information</h2>
-<p><strong>"Confidential Information"</strong> means any information disclosed by either Party to the other that is designated as confidential, or that reasonably should be understood to be confidential given the nature of the information and circumstances of disclosure. This includes, but is not limited to, technical data, trade secrets, know-how, research, product plans, products, services, customers, markets, software, developments, inventions, processes, formulas, technology, designs, drawings, engineering, finances, and business plans.</p>
+<h2>2. Definitions</h2>
+<p><strong>"Confidential Information"</strong> means any non-public, proprietary, or confidential information disclosed by the Disclosing Party to the Receiving Party, whether disclosed orally, in writing, electronically, or by any other means, and whether or not marked as "confidential," including but not limited to: trade secrets; business plans; financial information; customer and supplier lists; technical data; source code; algorithms; product roadmaps; marketing strategies; and any other information that a reasonable person would consider confidential given the nature of the information and the circumstances of disclosure.</p>
 
-<h2>3. Obligations</h2>
-<p>Each Party agrees to: (a) hold the other Party's Confidential Information in strict confidence; (b) not disclose such information to any third party without prior written consent; (c) use the Confidential Information solely for the Purpose; and (d) protect such information with at least the same degree of care used to protect its own confidential information, but no less than reasonable care.</p>
+<p><strong>"Representative"</strong> means, with respect to a Party, its directors, officers, employees, agents, advisors, contractors, and legal counsel who have a need to know the Confidential Information for the Purpose and who are bound by confidentiality obligations at least as protective as those set forth herein.</p>
 
-<h2>4. Exclusions</h2>
-<p>The obligations above do not apply to information that: (a) is or becomes publicly known through no fault of the receiving Party; (b) was rightfully known before receipt from the disclosing Party; (c) is independently developed without use of Confidential Information; or (d) is required to be disclosed by law or regulation, provided prompt written notice is given to the disclosing Party.</p>
+<h2>3. Obligations of Receiving Party</h2>
+<p>Each Receiving Party agrees to:</p>
+<ol>
+  <li>Hold all Confidential Information of the Disclosing Party in strict confidence using at least the same degree of care it uses to protect its own confidential information, but in no event less than reasonable care;</li>
+  <li>Not disclose any Confidential Information to any third party without the prior written consent of the Disclosing Party, except to its Representatives on a need-to-know basis;</li>
+  <li>Use the Confidential Information solely for the Purpose and for no other purpose whatsoever;</li>
+  <li>Promptly notify the Disclosing Party in writing upon becoming aware of any actual or suspected unauthorised disclosure or use of Confidential Information;</li>
+  <li>Not reverse engineer, disassemble, or decompile any prototypes, software, or tangible objects that embody the Confidential Information.</li>
+</ol>
 
-<h2>5. Term</h2>
-<p>This Agreement shall remain in effect for <strong>{{duration}} years</strong> from the Effective Date. The confidentiality obligations survive termination for a further <strong>2 years</strong>.</p>
+<h2>4. Exclusions from Confidentiality Obligations</h2>
+<p>The obligations of Section 3 shall not apply to information that the Receiving Party can demonstrate by documentary evidence:</p>
+<ol type="a">
+  <li>Is or becomes publicly known through no breach of this Agreement by the Receiving Party;</li>
+  <li>Was rightfully in the Receiving Party's possession prior to receipt from the Disclosing Party, free of any obligation of confidentiality;</li>
+  <li>Is independently developed by the Receiving Party without use of or reference to the Confidential Information;</li>
+  <li>Is rightfully received from a third party without restriction on disclosure; or</li>
+  <li>Is required to be disclosed by applicable law, regulation, or court order, provided that the Receiving Party gives the Disclosing Party prompt prior written notice to the extent permitted by law and cooperates with the Disclosing Party's efforts to obtain a protective order or other confidential treatment.</li>
+</ol>
 
-<h2>6. Governing Law</h2>
-<p>This Agreement is governed by the laws of <strong>{{governing_jurisdiction}}</strong>, without regard to conflict-of-law principles.</p>`),
+<h2>5. Intellectual Property</h2>
+<p>Nothing in this Agreement grants either Party any right, title, interest, or licence in or to any Confidential Information, intellectual property, or technology of the other Party. All Confidential Information remains the sole property of the Disclosing Party.</p>
+
+<h2>6. Return or Destruction of Information</h2>
+<p>Upon the written request of the Disclosing Party or upon expiration or termination of this Agreement, the Receiving Party shall promptly return or destroy (and certify in writing such destruction of) all Confidential Information and all copies, extracts, and summaries thereof, retaining only such copies as required by applicable law.</p>
+
+<h2>7. No Representations or Warranties</h2>
+<p>ALL CONFIDENTIAL INFORMATION IS PROVIDED "AS IS." THE DISCLOSING PARTY MAKES NO REPRESENTATION OR WARRANTY, EXPRESS OR IMPLIED, AS TO THE ACCURACY, COMPLETENESS, OR FITNESS FOR A PARTICULAR PURPOSE OF ANY CONFIDENTIAL INFORMATION.</p>
+
+<h2>8. Term and Termination</h2>
+<p>This Agreement shall commence on the Effective Date and remain in effect for a period of <strong>{{term_years}} years</strong>, unless earlier terminated by either Party upon thirty (30) days' written notice. The confidentiality obligations of Section 3 shall survive expiration or termination of this Agreement for a period of <strong>{{survival_years}} years</strong> thereafter.</p>
+
+<h2>9. Remedies</h2>
+<p>Each Party acknowledges that any breach of this Agreement may cause irreparable harm to the Disclosing Party for which monetary damages would be an inadequate remedy, and that the Disclosing Party shall be entitled to seek equitable relief, including injunction and specific performance, without the necessity of proving actual damages or posting bond.</p>
+
+<h2>10. General Provisions</h2>
+<p><strong>Governing Law.</strong> This Agreement shall be governed by and construed in accordance with the laws of <strong>{{governing_law_jurisdiction}}</strong>, without regard to its conflict of law principles.</p>
+<p><strong>Dispute Resolution.</strong> Any dispute arising out of or relating to this Agreement shall be submitted to the exclusive jurisdiction of the courts located in <strong>{{dispute_resolution_venue}}</strong>.</p>
+<p><strong>Entire Agreement.</strong> This Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior and contemporaneous agreements, negotiations, and understandings.</p>
+<p><strong>Amendment.</strong> This Agreement may not be amended except by a written instrument signed by both Parties.</p>
+<p><strong>Severability.</strong> If any provision of this Agreement is found to be unenforceable, the remaining provisions shall remain in full force and effect.</p>
+<p><strong>Waiver.</strong> No failure or delay by either Party in exercising any right shall constitute a waiver of that right.</p>
+<p><strong>Counterparts.</strong> This Agreement may be executed in counterparts, each of which shall be deemed an original, and electronic signatures shall be deemed valid.</p>
+
+<div style="margin-top:48px;"><hr style="border:none;border-top:1px solid #e2e8f0;margin-bottom:32px;"/><table style="width:100%;border-collapse:collapse;"><tr><td style="width:50%;padding-right:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Party A — {{party_a_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Authorised Signatory: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td><td style="width:50%;padding-left:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Party B — {{party_b_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Authorised Signatory: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td></tr></table></div>`),
 
   t('One-Way Non-Disclosure Agreement',
     'Unilateral NDA where one party discloses confidential information to another.',
@@ -152,56 +194,138 @@ const templates = [
   t('Independent Contractor Agreement',
     'Standard agreement for hiring freelancers and 1099 contractors.',
     'Legal', ['contractor', 'freelance'],
-    `<p>This Independent Contractor Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{start_date}}</strong> between <strong>{{company_name}}</strong> (<strong>"Company"</strong>) and <strong>{{contractor_name}}</strong> (<strong>"Contractor"</strong>).</p>
+    `<p>This Freelance Service Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> by and between:</p>
 
-<h2>1. Services</h2>
-<p>Contractor agrees to provide the following services (<strong>"Services"</strong>):</p>
+<p><strong>{{client_name}}</strong>, a {{client_entity_type}} with its principal place of business at {{client_address}} (<strong>"Client"</strong>); and</p>
+
+<p><strong>{{freelancer_name}}</strong>, an individual / {{freelancer_entity_type}} with a principal place of business at {{freelancer_address}} (<strong>"Freelancer"</strong>).</p>
+
+<h2>1. Services and Deliverables</h2>
+<p>Freelancer agrees to perform the following services and provide the following deliverables (collectively, <strong>"Services"</strong>):</p>
 <p>{{scope_of_work}}</p>
+<p>Freelancer shall perform the Services in a professional and workmanlike manner, consistent with industry standards. Any changes to the scope of Services must be agreed upon in writing via a signed Change Order before work begins.</p>
 
-<h2>2. Compensation</h2>
-<p>Company agrees to pay Contractor at a rate of <strong>{{rate}}</strong>. Invoices shall be submitted <strong>{{invoice_frequency}}</strong> and paid within <strong>{{payment_terms}} days</strong> of receipt.</p>
+<h2>2. Project Timeline</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr style="background:#f8fafc;"><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Milestone</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Due Date</th></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Project Kickoff</td><td style="padding:10px;border:1px solid #e2e8f0;">{{kickoff_date}}</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">First Draft / Prototype</td><td style="padding:10px;border:1px solid #e2e8f0;">{{draft_date}}</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Client Review Period</td><td style="padding:10px;border:1px solid #e2e8f0;">{{review_period}}</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Final Delivery</td><td style="padding:10px;border:1px solid #e2e8f0;">{{delivery_date}}</td></tr>
+</table>
+<p>Client acknowledges that timelines are contingent upon Client's timely provision of feedback, materials, and approvals. Delays caused by Client may result in a proportional extension of deadlines.</p>
 
-<h2>3. Independent Contractor Status</h2>
-<p>Contractor is an independent contractor, not an employee, agent, partner, or joint venture of Company. Contractor is solely responsible for all taxes, insurance, and benefits. Contractor is free to perform services for other clients during the term of this Agreement.</p>
+<h2>3. Compensation and Payment Terms</h2>
+<p>Client agrees to pay Freelancer as follows:</p>
+<table style="width:100%;border-collapse:collapse;">
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:40%">Fee Structure</td><td style="padding:8px;border:1px solid #e2e8f0;">{{fee_structure}} (e.g., fixed-price / hourly)</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Total / Rate</td><td style="padding:8px;border:1px solid #e2e8f0;">{{total_fee_or_rate}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Deposit (due on signing)</td><td style="padding:8px;border:1px solid #e2e8f0;">{{deposit_amount}} ({{deposit_percentage}}%)</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Remaining Balance</td><td style="padding:8px;border:1px solid #e2e8f0;">{{balance_amount}} due upon {{balance_trigger}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Payment Terms</td><td style="padding:8px;border:1px solid #e2e8f0;">Net {{payment_due_days}} days from invoice date</td></tr>
+</table>
+<p>Late payments shall accrue interest at the rate of <strong>1.5% per month</strong> (or the maximum rate permitted by law, whichever is lower) from the date payment was due. Freelancer may suspend Services for accounts overdue by more than <strong>10 business days</strong> without liability.</p>
 
-<h2>4. Intellectual Property</h2>
-<p>All work product, inventions, and deliverables created by Contractor in connection with this Agreement shall be considered work-for-hire and shall be the sole property of Company upon full payment of all fees.</p>
+<h2>4. Expenses</h2>
+<p>Freelancer shall not incur expenses on Client's behalf without prior written approval. Pre-approved, reasonable out-of-pocket expenses will be reimbursed within <strong>30 days</strong> of submission of receipts.</p>
 
-<h2>5. Confidentiality</h2>
-<p>Contractor agrees to keep all Company proprietary information confidential and not to disclose it to any third party.</p>
+<h2>5. Independent Contractor Status</h2>
+<p>Freelancer is an independent contractor, not an employee, agent, or partner of Client. Freelancer is solely responsible for all federal, state, and local taxes, social security contributions, insurance, and other statutory obligations arising from compensation paid under this Agreement. Nothing in this Agreement creates an employment, agency, or joint venture relationship.</p>
 
-<h2>6. Term &amp; Termination</h2>
-<p>This Agreement commences on <strong>{{start_date}}</strong> and continues until <strong>{{end_date}}</strong>, unless earlier terminated. Either Party may terminate this Agreement upon <strong>{{notice_period}} days'</strong> written notice.</p>`),
+<h2>6. Intellectual Property and Ownership</h2>
+<p><strong>Work Product.</strong> Upon receipt of full payment, all original work product, deliverables, and materials created specifically for Client under this Agreement (the <strong>"Work Product"</strong>) shall be assigned to and become the exclusive property of Client, including all associated intellectual property rights.</p>
+<p><strong>Pre-existing IP.</strong> Freelancer retains ownership of all pre-existing tools, frameworks, libraries, processes, methodologies, and know-how developed prior to or independently of this Agreement (<strong>"Background IP"</strong>). To the extent any Background IP is incorporated into the Work Product, Freelancer grants Client a non-exclusive, perpetual, royalty-free licence to use such Background IP solely as part of the Work Product.</p>
+<p><strong>Moral Rights.</strong> Freelancer waives any moral rights in the Work Product to the fullest extent permitted by law.</p>
+
+<h2>7. Confidentiality</h2>
+<p>Freelancer agrees to keep confidential all non-public information received from Client in connection with this Agreement, including but not limited to business plans, technical data, financial information, and customer data. This obligation survives termination for a period of <strong>3 years</strong>.</p>
+
+<h2>8. Representations and Warranties</h2>
+<p>Freelancer represents and warrants that: (a) Freelancer has the full right and authority to enter into this Agreement; (b) the Services and Work Product will not infringe any third-party intellectual property rights; (c) the Work Product will be original; and (d) Freelancer is not subject to any agreement that would restrict performance of Services hereunder.</p>
+
+<h2>9. Limitation of Liability</h2>
+<p>IN NO EVENT SHALL EITHER PARTY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES. FREELANCER'S TOTAL LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE TOTAL FEES PAID BY CLIENT IN THE THREE (3) MONTHS PRECEDING THE CLAIM.</p>
+
+<h2>10. Term and Termination</h2>
+<p>This Agreement commences on the Effective Date and continues until the Services are completed and all payments are made, unless earlier terminated. Either Party may terminate this Agreement upon <strong>{{notice_days}} days'</strong> written notice. Upon termination, Client shall pay for all Services rendered and expenses incurred through the termination date. Work Product shall not transfer to Client until all outstanding amounts are paid in full.</p>
+
+<h2>11. Dispute Resolution and Governing Law</h2>
+<p>This Agreement is governed by the laws of <strong>{{governing_law}}</strong>. Any dispute shall first be submitted to good-faith negotiation. If unresolved within 30 days, disputes shall be resolved by binding arbitration in <strong>{{arbitration_venue}}</strong> under the rules of <strong>{{arbitration_body}}</strong>.</p>
+
+<h2>12. General</h2>
+<p>This Agreement constitutes the entire agreement between the Parties and supersedes all prior discussions. It may be amended only in writing signed by both Parties. If any provision is held invalid, the remaining provisions remain in effect. This Agreement may be executed electronically.</p>
+
+<div style="margin-top:48px;"><hr style="border:none;border-top:1px solid #e2e8f0;margin-bottom:32px;"/><table style="width:100%;border-collapse:collapse;"><tr><td style="width:50%;padding-right:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Client — {{client_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td><td style="width:50%;padding-left:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Freelancer — {{freelancer_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td></tr></table></div>`),
 
   t('Employment Offer Letter',
     'Formal offer of employment with compensation details and start date.',
     'Legal', ['employment', 'offer'],
-    `<p>Date: <strong>{{date}}</strong></p>
-<p>Dear <strong>{{candidate_name}}</strong>,</p>
-<p>We are thrilled to offer you a position at <strong>{{company_name}}</strong>. After careful consideration, we believe you will be a valuable member of our team. Please review the details of this offer below.</p>
+    `<p>Date: <strong>{{offer_date}}</strong></p>
 
-<h2>Position Details</h2>
+<p>{{candidate_name}}<br/>{{candidate_address}}</p>
+
+<p>Dear <strong>{{candidate_first_name}}</strong>,</p>
+
+<p>On behalf of <strong>{{company_name}}</strong> (<strong>"Company"</strong>), we are pleased to extend this offer of employment to you. We were impressed by your background and believe you will make a significant contribution to our team. The terms and conditions of your employment are set forth below.</p>
+
+<h2>1. Position and Reporting</h2>
 <table style="width:100%;border-collapse:collapse;">
   <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:40%">Job Title</td><td style="padding:8px;border:1px solid #e2e8f0;">{{job_title}}</td></tr>
   <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Department</td><td style="padding:8px;border:1px solid #e2e8f0;">{{department}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Reports To</td><td style="padding:8px;border:1px solid #e2e8f0;">{{reporting_manager}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Work Location</td><td style="padding:8px;border:1px solid #e2e8f0;">{{work_location}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Employment Type</td><td style="padding:8px;border:1px solid #e2e8f0;">{{employment_type}} (Full-Time / Part-Time)</td></tr>
   <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Start Date</td><td style="padding:8px;border:1px solid #e2e8f0;">{{start_date}}</td></tr>
-  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Base Salary</td><td style="padding:8px;border:1px solid #e2e8f0;">{{salary}} per {{pay_period}}</td></tr>
-  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Work Location</td><td style="padding:8px;border:1px solid #e2e8f0;">{{location}}</td></tr>
-  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Reporting To</td><td style="padding:8px;border:1px solid #e2e8f0;">{{manager}}</td></tr>
 </table>
 
-<h2>Benefits</h2>
-<p>You will be eligible for the following benefits, subject to Company policy: {{benefits_summary}}.</p>
+<h2>2. Compensation</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:40%">Base Salary</td><td style="padding:8px;border:1px solid #e2e8f0;">{{base_salary}} per {{pay_period}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Pay Frequency</td><td style="padding:8px;border:1px solid #e2e8f0;">{{pay_frequency}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Target Bonus</td><td style="padding:8px;border:1px solid #e2e8f0;">{{bonus_target}} of base salary, subject to Company performance and individual objectives</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Equity</td><td style="padding:8px;border:1px solid #e2e8f0;">{{equity_grant}}, subject to the Company's equity plan and a {{vesting_schedule}} vesting schedule</td></tr>
+</table>
 
-<h2>Conditions of Employment</h2>
-<p>This offer is contingent upon: (a) successful completion of a background check; (b) your execution of the Company's standard Confidentiality and IP Agreement; and (c) proof of your right to work in <strong>{{country}}</strong>.</p>
+<h2>3. Benefits</h2>
+<p>You will be eligible to participate in the following benefit programs, subject to the terms of each plan and any applicable waiting periods:</p>
+<ul>
+  <li><strong>Health Insurance:</strong> {{health_insurance_details}}</li>
+  <li><strong>Dental &amp; Vision:</strong> {{dental_vision_details}}</li>
+  <li><strong>Retirement Plan:</strong> {{retirement_plan_details}}</li>
+  <li><strong>Paid Time Off:</strong> {{pto_days}} days per year, plus {{public_holidays}} public holidays</li>
+  <li><strong>Sick Leave:</strong> {{sick_leave_policy}}</li>
+  <li><strong>Professional Development:</strong> {{professional_development_budget}}</li>
+  <li><strong>Other Benefits:</strong> {{other_benefits}}</li>
+</ul>
+<p>The Company reserves the right to modify, suspend, or discontinue any benefit plan at any time with reasonable notice.</p>
 
-<h2>At-Will Employment</h2>
-<p>Your employment with the Company is at-will, meaning either you or the Company may terminate the employment relationship at any time, with or without cause or advance notice.</p>
+<h2>4. Conditions of Employment</h2>
+<p>This offer is contingent upon the following conditions being satisfied prior to or on your start date:</p>
+<ol type="a">
+  <li>Successful completion of a background and reference check satisfactory to the Company;</li>
+  <li>Your execution of the Company's standard <em>Confidentiality, Intellectual Property Assignment, and Non-Solicitation Agreement</em>;</li>
+  <li>Verification of your eligibility to work in <strong>{{country}}</strong> in accordance with applicable immigration law;</li>
+  <li>Completion of all required pre-employment documentation.</li>
+</ol>
 
-<p>This offer expires on <strong>{{expiry_date}}</strong>. Please sign and return this letter by that date.</p>
-<p>We look forward to welcoming you to the team!</p>
-<p>Sincerely,<br/><strong>{{hiring_manager_name}}</strong><br/>{{hiring_manager_title}}<br/>{{company_name}}</p>`),
+<h2>5. At-Will Employment</h2>
+<p>Your employment with the Company is <strong>at-will</strong>, meaning either you or the Company may terminate the employment relationship at any time, for any reason or no reason, with or without cause or advance notice, subject to applicable law. Nothing in this offer letter creates a contract of employment for any definite period of time.</p>
+
+<h2>6. Outside Activities and Conflicts of Interest</h2>
+<p>During your employment, you agree to devote your full professional attention to the Company. You must disclose and obtain written approval for any outside employment, advisory roles, or business interests that could create a conflict of interest with the Company.</p>
+
+<h2>7. Confidentiality and Intellectual Property</h2>
+<p>As a condition of employment, you will be required to execute and comply with the Company's <em>Confidentiality and Intellectual Property Agreement</em>, which governs your obligations with respect to the Company's proprietary information and any work product you create during your employment. Please review this document before signing.</p>
+
+<h2>8. Expiration of Offer</h2>
+<p>This offer will expire on <strong>{{offer_expiry_date}}</strong>. To accept this offer, please sign and return this letter and the accompanying Confidentiality and IP Agreement by that date. If we do not receive your signed acceptance by that date, this offer shall be deemed withdrawn.</p>
+
+<p>We are genuinely excited about the prospect of you joining our team and look forward to working together. Please do not hesitate to contact <strong>{{hr_contact_name}}</strong> at <strong>{{hr_contact_email}}</strong> if you have any questions.</p>
+
+<p>Sincerely,</p>
+<p><strong>{{hiring_manager_name}}</strong><br/>{{hiring_manager_title}}<br/>{{company_name}}<br/>{{hiring_manager_email}}</p>
+
+<div style="margin-top:48px;"><hr style="border:none;border-top:1px solid #e2e8f0;margin-bottom:32px;"/><table style="width:100%;border-collapse:collapse;"><tr><td style="width:50%;padding-right:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Accepted by Candidate</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: {{candidate_name}}</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td><td style="width:50%;padding-left:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">On Behalf of {{company_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: {{hiring_manager_name}}</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: {{hiring_manager_title}}</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td></tr></table></div>`),
 
   t('Master Service Agreement (MSA)',
     'Framework agreement governing the terms of ongoing services.',
@@ -255,22 +379,71 @@ const templates = [
   t('Consulting Agreement',
     'Engagement agreement for advisory and consulting services.',
     'Legal', ['consulting'],
-    `<p>This Consulting Agreement (<strong>"Agreement"</strong>) is effective as of <strong>{{start_date}}</strong> between <strong>{{consultant_name}}</strong> (<strong>"Consultant"</strong>) and <strong>{{client_name}}</strong> (<strong>"Client"</strong>).</p>
+    `<p>This Consulting Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> (the <strong>"Effective Date"</strong>) by and between:</p>
 
-<h2>1. Consulting Services</h2>
-<p>Consultant will provide the following advisory services: <strong>{{services_description}}</strong>.</p>
+<p><strong>{{client_name}}</strong>, a {{client_entity_type}} with its principal place of business at {{client_address}} (<strong>"Client"</strong>); and</p>
 
-<h2>2. Compensation</h2>
-<p>Client shall pay Consultant a fee of <strong>{{fee}}</strong> on a <strong>{{billing_basis}}</strong> basis. Reasonable out-of-pocket expenses pre-approved by Client will be reimbursed within 30 days.</p>
+<p><strong>{{consultant_name}}</strong>, a {{consultant_entity_type}} with its principal place of business at {{consultant_address}} (<strong>"Consultant"</strong>).</p>
 
-<h2>3. Term</h2>
-<p>This Agreement shall begin on <strong>{{start_date}}</strong> and expire on <strong>{{end_date}}</strong>, unless extended by mutual written agreement or earlier terminated.</p>
+<h2>1. Engagement and Scope of Services</h2>
+<p>Client hereby engages Consultant, and Consultant agrees to provide, the consulting services described in Exhibit A attached hereto (the <strong>"Services"</strong>). Consultant shall perform the Services in a professional and competent manner, consistent with industry best practices. Consultant shall not subcontract any Services without Client's prior written consent.</p>
 
-<h2>4. Ownership of Work Product</h2>
-<p>All deliverables produced solely for Client shall become Client's property upon full payment. Consultant retains the right to use general skills and methodologies.</p>
+<h2>2. Term</h2>
+<p>This Agreement shall commence on <strong>{{start_date}}</strong> and, unless earlier terminated in accordance with Section 10, shall continue through <strong>{{end_date}}</strong> (the <strong>"Initial Term"</strong>). Upon expiration of the Initial Term, this Agreement may be renewed by mutual written agreement of the Parties.</p>
 
-<h2>5. Non-Solicitation</h2>
-<p>During the term and for <strong>12 months</strong> thereafter, Consultant agrees not to solicit or hire any employee or contractor of Client.</p>`),
+<h2>3. Compensation and Expenses</h2>
+<p><strong>Consulting Fees.</strong> Client shall pay Consultant at the rate of <strong>{{fee_rate}}</strong> on a {{billing_basis}} basis. Consultant shall submit invoices to Client {{invoice_frequency}}. Client shall pay each invoice within <strong>{{payment_terms}} days</strong> of receipt.</p>
+<p><strong>Retainer.</strong> If applicable, Client shall pay a monthly retainer of <strong>{{retainer_amount}}</strong>, due on the first business day of each month, credited against hourly fees incurred during that month.</p>
+<p><strong>Expenses.</strong> Client shall reimburse Consultant for all reasonable, pre-approved out-of-pocket expenses incurred in connection with the Services, including travel, accommodation, and materials, upon submission of appropriate documentation. Expenses exceeding <strong>{{expense_threshold}}</strong> require advance written approval.</p>
+<p><strong>Late Payments.</strong> Invoices not paid within the agreed period shall accrue interest at <strong>1.5% per month</strong>. Client shall also reimburse Consultant for reasonable costs of collection, including attorneys' fees.</p>
+
+<h2>4. Independent Contractor Relationship</h2>
+<p>Consultant is an independent contractor and not an employee, agent, partner, or joint venturer of Client. Consultant is solely responsible for all taxes, withholdings, social insurance contributions, and statutory obligations arising from compensation under this Agreement. Consultant shall determine the method, details, and means of performing the Services.</p>
+
+<h2>5. Confidential Information</h2>
+<p><strong>Definition.</strong> <strong>"Confidential Information"</strong> means any non-public, proprietary, or confidential information of Client disclosed to Consultant in connection with this Agreement, whether oral or written.</p>
+<p><strong>Obligations.</strong> Consultant agrees to: (a) hold Confidential Information in strict confidence; (b) not disclose it to any third party without Client's prior written consent; (c) use it only to perform the Services; and (d) protect it with at least the same care used to protect Consultant's own confidential information.</p>
+<p><strong>Exceptions.</strong> Confidentiality obligations do not apply to information that is publicly known, was known to Consultant prior to disclosure, is independently developed, or is required to be disclosed by law (with prior notice to Client).</p>
+<p><strong>Survival.</strong> The confidentiality obligations shall survive termination of this Agreement for a period of <strong>{{confidentiality_survival_years}} years</strong>.</p>
+
+<h2>6. Intellectual Property</h2>
+<p><strong>Work Product.</strong> Subject to full payment of all fees, all deliverables, reports, analyses, and materials created by Consultant specifically for Client under this Agreement (collectively, <strong>"Work Product"</strong>) shall be considered works-for-hire and shall be owned exclusively by Client. Consultant hereby assigns to Client all right, title, and interest in and to the Work Product, including all intellectual property rights therein.</p>
+<p><strong>Background IP.</strong> Consultant retains all right, title, and interest in pre-existing methodologies, tools, frameworks, and know-how (<strong>"Background IP"</strong>). To the extent Background IP is incorporated into Work Product, Consultant grants Client a non-exclusive, perpetual, royalty-free, worldwide licence to use such Background IP solely within the Work Product.</p>
+<p><strong>Consultant Portfolio.</strong> Consultant may reference the engagement in professional materials (e.g., portfolio, LinkedIn) with Client's prior written consent, which shall not be unreasonably withheld.</p>
+
+<h2>7. Non-Solicitation</h2>
+<p>During the term of this Agreement and for a period of <strong>{{non_solicit_months}} months</strong> following its expiration or termination, Consultant agrees not to directly or indirectly: (a) solicit or hire any employee, officer, or contractor of Client; or (b) solicit any customer of Client with whom Consultant had material contact during the engagement, for competitive purposes.</p>
+
+<h2>8. Representations and Warranties</h2>
+<p>Consultant represents and warrants that: (a) Consultant has full authority to enter into this Agreement; (b) performance of Services will not violate any agreement with a third party; (c) the Work Product will be original and will not infringe any third-party intellectual property rights; and (d) Consultant shall perform the Services in compliance with all applicable laws and regulations.</p>
+
+<h2>9. Limitation of Liability</h2>
+<p>IN NO EVENT SHALL EITHER PARTY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, PUNITIVE, OR EXEMPLARY DAMAGES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. CONSULTANT'S TOTAL CUMULATIVE LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE TOTAL FEES PAID BY CLIENT TO CONSULTANT IN THE THREE (3) MONTHS IMMEDIATELY PRECEDING THE CLAIM.</p>
+
+<h2>10. Term and Termination</h2>
+<p><strong>Termination for Convenience.</strong> Either Party may terminate this Agreement upon <strong>{{notice_days}} days'</strong> written notice to the other Party.</p>
+<p><strong>Termination for Cause.</strong> Either Party may terminate this Agreement immediately upon written notice if the other Party materially breaches this Agreement and fails to cure such breach within <strong>15 days</strong> of written notice.</p>
+<p><strong>Effect of Termination.</strong> Upon termination, Client shall pay for all Services rendered and expenses incurred through the termination date. Sections 5, 6, 7, 9, 11, and 12 shall survive termination.</p>
+
+<h2>11. Indemnification</h2>
+<p>Each Party (the <strong>"Indemnifying Party"</strong>) agrees to indemnify, defend, and hold harmless the other Party and its officers, directors, and employees from and against any claims, damages, losses, and expenses (including reasonable attorneys' fees) arising from: (a) the Indemnifying Party's breach of this Agreement; (b) the Indemnifying Party's negligence or wilful misconduct; or (c) any infringement of third-party intellectual property rights caused by the Indemnifying Party.</p>
+
+<h2>12. General Provisions</h2>
+<p><strong>Governing Law.</strong> This Agreement is governed by the laws of <strong>{{governing_law}}</strong>, without regard to conflict-of-law principles.</p>
+<p><strong>Dispute Resolution.</strong> Any dispute shall first be subject to good-faith negotiation for 30 days. Unresolved disputes shall be resolved by binding arbitration in <strong>{{arbitration_venue}}</strong>.</p>
+<p><strong>Entire Agreement.</strong> This Agreement, including Exhibit A, constitutes the entire agreement and supersedes all prior agreements relating to the subject matter hereof.</p>
+<p><strong>Amendment.</strong> No amendment shall be valid unless in writing and signed by both Parties.</p>
+<p><strong>Severability.</strong> If any provision is held unenforceable, it shall be modified to the minimum extent necessary to make it enforceable, and all other provisions remain in full force.</p>
+<p><strong>Notices.</strong> All notices shall be in writing and delivered by email with confirmation, courier, or certified mail to the addresses above.</p>
+
+<h2>Exhibit A — Statement of Work</h2>
+<p><strong>Scope of Services:</strong> {{detailed_scope_of_services}}</p>
+<p><strong>Key Deliverables:</strong></p>
+<ul><li>{{deliverable_1}}</li><li>{{deliverable_2}}</li><li>{{deliverable_3}}</li></ul>
+<p><strong>Project Timeline:</strong> {{project_timeline}}</p>
+<p><strong>Success Criteria:</strong> {{success_criteria}}</p>
+
+<div style="margin-top:48px;"><hr style="border:none;border-top:1px solid #e2e8f0;margin-bottom:32px;"/><table style="width:100%;border-collapse:collapse;"><tr><td style="width:50%;padding-right:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Client — {{client_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td><td style="width:50%;padding-left:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Consultant — {{consultant_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td></tr></table></div>`),
 
   t('Partnership Agreement',
     'Define roles, contributions, and profit-sharing in a business partnership.',
@@ -296,47 +469,185 @@ const templates = [
   t('Terms of Service',
     'GDPR-compliant terms of service for a website or SaaS product.',
     'Legal', ['tos', 'saas'],
-    `<p>Last updated: <strong>{{last_updated}}</strong></p>
-<p>Please read these Terms of Service (<strong>"Terms"</strong>) carefully before using <strong>{{product_name}}</strong> operated by <strong>{{company_name}}</strong> (<strong>"Company"</strong>).</p>
+    `<p><strong>Last Updated: {{last_updated}}</strong><br/>Effective Date: <strong>{{effective_date}}</strong></p>
 
-<h2>1. Acceptance</h2>
-<p>By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part, you may not access the Service.</p>
+<p>Please read these Terms of Service (<strong>"Terms"</strong> or <strong>"Agreement"</strong>) carefully before accessing or using the services provided by <strong>{{company_name}}</strong>, a {{company_entity_type}} registered at {{company_address}} (<strong>"Company,"</strong> <strong>"we,"</strong> <strong>"us,"</strong> or <strong>"our"</strong>), through our website at {{website_url}} and related applications (collectively, the <strong>"Service"</strong>).</p>
 
-<h2>2. Accounts</h2>
-<p>You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account. Notify us immediately of any unauthorised access.</p>
+<p>By creating an account, accessing, or using the Service, you (<strong>"User,"</strong> <strong>"you,"</strong> or <strong>"your"</strong>) agree to be legally bound by these Terms and our Privacy Policy, which is incorporated herein by reference. If you do not agree to these Terms, you must not use the Service.</p>
 
-<h2>3. Subscriptions &amp; Billing</h2>
-<p>Paid subscriptions are billed in advance on a {{billing_cycle}} basis. Refunds are processed in accordance with our Refund Policy.</p>
+<h2>1. Definitions</h2>
+<p><strong>"Account"</strong> means the unique account you create to access the Service.</p>
+<p><strong>"Content"</strong> means any information, data, text, files, documents, or other materials uploaded, submitted, or transmitted through the Service.</p>
+<p><strong>"Subscription"</strong> means a paid plan granting access to specified features of the Service for a defined period.</p>
+<p><strong>"User Content"</strong> means Content submitted or created by you using the Service.</p>
 
-<h2>4. Intellectual Property</h2>
-<p>The Service and its original content are the exclusive property of Company and protected by copyright, trademark, and other laws.</p>
+<h2>2. Eligibility</h2>
+<p>You must be at least <strong>{{minimum_age}}</strong> years of age and have the legal capacity to enter into binding contracts to use the Service. By using the Service, you represent and warrant that you meet these requirements. If you are using the Service on behalf of a business or entity, you represent that you have authority to bind that entity to these Terms.</p>
 
-<h2>5. Limitation of Liability</h2>
-<p>Company shall not be liable for indirect, incidental, special, or consequential damages. Our total liability shall not exceed the amount paid by you in the <strong>12 months</strong> preceding the claim.</p>
+<h2>3. Account Registration and Security</h2>
+<p>To access certain features, you must register for an Account. You agree to: (a) provide accurate, current, and complete registration information; (b) maintain and promptly update your information; (c) keep your password confidential and not share it with any third party; (d) notify us immediately at {{security_email}} of any unauthorised access to your Account; and (e) accept responsibility for all activities that occur under your Account.</p>
+<p>We reserve the right to suspend or terminate Accounts that we reasonably believe have been compromised or are being misused.</p>
 
-<h2>6. Governing Law</h2>
-<p>These Terms shall be governed by the laws of <strong>{{jurisdiction}}</strong>.</p>`),
+<h2>4. Subscriptions, Fees, and Payment</h2>
+<p><strong>Free Tier.</strong> The Service may offer a free tier with limited features, subject to usage restrictions specified on our pricing page.</p>
+<p><strong>Paid Subscriptions.</strong> Paid Subscriptions are billed in advance on a {{billing_cycle}} (monthly/annual) basis. All fees are stated in {{currency}} and are exclusive of applicable taxes unless stated otherwise.</p>
+<p><strong>Payment.</strong> You authorise us (or our payment processor) to charge your designated payment method for all fees. If payment fails, we may suspend your access to paid features until payment is received.</p>
+<p><strong>Price Changes.</strong> We may modify Subscription fees upon <strong>30 days'</strong> prior notice. Continued use after the effective date of the price change constitutes acceptance.</p>
+<p><strong>Refunds.</strong> Except as required by applicable law, all payments are non-refundable. We do not provide refunds or credits for partial subscription periods, unused features, or unused document allowances.</p>
+<p><strong>Cancellation.</strong> You may cancel your Subscription at any time through your Account settings. Cancellation takes effect at the end of the current billing period, and you will retain access to paid features until that date.</p>
+
+<h2>5. Acceptable Use</h2>
+<p>You agree to use the Service only for lawful purposes and in accordance with these Terms. You shall not:</p>
+<ol type="a">
+  <li>Upload, transmit, or distribute any Content that is unlawful, defamatory, obscene, fraudulent, or that infringes any third-party rights;</li>
+  <li>Use the Service to send unsolicited communications (spam);</li>
+  <li>Attempt to gain unauthorised access to any portion of the Service or related systems;</li>
+  <li>Interfere with or disrupt the integrity or performance of the Service;</li>
+  <li>Use automated means (bots, scrapers) to access or collect data from the Service without our express written consent;</li>
+  <li>Impersonate any person or entity or misrepresent your affiliation with any person or entity;</li>
+  <li>Use the Service in any manner that could violate applicable law, regulation, or third-party rights.</li>
+</ol>
+<p>We reserve the right to investigate violations and take appropriate action, including suspension or termination of access and reporting to law enforcement.</p>
+
+<h2>6. User Content</h2>
+<p><strong>Ownership.</strong> You retain all ownership rights in your User Content. By submitting User Content to the Service, you grant us a non-exclusive, worldwide, royalty-free, sublicensable licence to host, store, process, display, and transmit your User Content solely to the extent necessary to provide and operate the Service.</p>
+<p><strong>Responsibility.</strong> You are solely responsible for your User Content. You represent and warrant that: (a) you own or have the necessary rights to your User Content; (b) your User Content does not infringe any third-party rights; and (c) your User Content complies with applicable law.</p>
+<p><strong>Removal.</strong> We reserve the right (but not the obligation) to remove or disable access to any User Content that violates these Terms or applicable law.</p>
+
+<h2>7. Intellectual Property</h2>
+<p>The Service and all its original content (excluding User Content), features, design, software, and functionality are and remain the exclusive property of the Company and its licensors, protected by copyright, trademark, trade secret, and other intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of the Service or its content without our express written permission.</p>
+
+<h2>8. Third-Party Services and Links</h2>
+<p>The Service may integrate with or contain links to third-party services, websites, or applications. We do not control and are not responsible for the content, privacy practices, or availability of such third-party services. Your use of third-party services is subject to their respective terms and policies.</p>
+
+<h2>9. Disclaimer of Warranties</h2>
+<p>THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR UNINTERRUPTED OR ERROR-FREE OPERATION. WE DO NOT WARRANT THAT THE SERVICE WILL MEET YOUR REQUIREMENTS OR THAT ANY ERRORS WILL BE CORRECTED.</p>
+
+<h2>10. Limitation of Liability</h2>
+<p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE COMPANY, ITS AFFILIATES, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, REVENUE, DATA, BUSINESS OPPORTUNITIES, OR GOODWILL, ARISING OUT OF OR IN CONNECTION WITH THESE TERMS OR THE USE OF OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE COMPANY'S TOTAL AGGREGATE LIABILITY SHALL NOT EXCEED THE GREATER OF (A) THE TOTAL FEES PAID BY YOU IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR (B) {{minimum_liability_cap}}.</p>
+
+<h2>11. Indemnification</h2>
+<p>You agree to defend, indemnify, and hold harmless the Company and its affiliates, directors, officers, employees, and agents from and against any and all claims, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising from: (a) your use of the Service; (b) your User Content; (c) your violation of these Terms; or (d) your violation of any third-party rights.</p>
+
+<h2>12. Term and Termination</h2>
+<p>These Terms are effective until terminated. We may suspend or terminate your access to the Service immediately, without notice, for: (a) material breach of these Terms; (b) non-payment of fees; (c) activity that we reasonably believe poses a legal, security, or reputational risk to us or other users; or (d) as required by applicable law. You may terminate by cancelling your account. Upon termination, your right to use the Service ceases and we may delete your data subject to our data retention policy and applicable law. Sections 6–12 and 14 shall survive termination.</p>
+
+<h2>13. Changes to Terms</h2>
+<p>We reserve the right to modify these Terms at any time. We will provide notice of material changes by posting the updated Terms with a revised effective date and, where appropriate, by email. Your continued use of the Service after the effective date constitutes your acceptance of the modified Terms. If you do not agree to the modified Terms, you must stop using the Service.</p>
+
+<h2>14. Governing Law and Dispute Resolution</h2>
+<p><strong>Governing Law.</strong> These Terms shall be governed by and construed in accordance with the laws of <strong>{{governing_law_jurisdiction}}</strong>, without regard to its conflict of law provisions.</p>
+<p><strong>Informal Resolution.</strong> Before initiating any formal legal proceeding, you agree to attempt to resolve the dispute informally by contacting us at {{legal_email}}. We will attempt to resolve the dispute within <strong>30 days</strong>.</p>
+<p><strong>Arbitration.</strong> If informal resolution fails, any dispute, claim, or controversy arising out of or relating to these Terms shall be resolved by binding arbitration administered by <strong>{{arbitration_body}}</strong> in <strong>{{arbitration_venue}}</strong>, except that either Party may seek injunctive or other equitable relief in any court of competent jurisdiction.</p>
+<p><strong>Class Action Waiver.</strong> YOU AND THE COMPANY AGREE THAT EACH MAY BRING CLAIMS AGAINST THE OTHER ONLY IN AN INDIVIDUAL CAPACITY AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY CLASS, CONSOLIDATED, OR REPRESENTATIVE ACTION.</p>
+
+<h2>15. General Provisions</h2>
+<p><strong>Entire Agreement.</strong> These Terms and the Privacy Policy constitute the entire agreement between you and the Company regarding the Service.</p>
+<p><strong>Severability.</strong> If any provision of these Terms is found invalid or unenforceable, that provision shall be modified to the minimum extent necessary, and all other provisions shall remain in effect.</p>
+<p><strong>Waiver.</strong> Failure to enforce any provision of these Terms shall not constitute a waiver of that right.</p>
+<p><strong>Assignment.</strong> You may not assign these Terms without our prior written consent. We may assign these Terms in connection with a merger, acquisition, or sale of assets.</p>
+<p><strong>Contact.</strong> For questions about these Terms, contact us at: {{company_name}}, {{company_address}}, {{legal_email}}.</p>`),
 
   t('Privacy Policy',
     'GDPR-aligned privacy policy for websites and apps.',
     'Legal', ['privacy', 'gdpr'],
-    `<p>Effective Date: <strong>{{effective_date}}</strong></p>
-<p><strong>{{company_name}}</strong> (<strong>"we"</strong>, <strong>"us"</strong>) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and protect your personal data.</p>
+    `<p><strong>Last Updated: {{last_updated}}</strong><br/>Effective Date: <strong>{{effective_date}}</strong></p>
 
-<h2>1. Data We Collect</h2>
-<p>We collect: (a) Account data (name, email, password); (b) Usage data (pages visited, features used); (c) Payment data (processed via our payment provider — we do not store card numbers); (d) Communications (support emails).</p>
+<p>This Privacy Policy describes how <strong>{{company_name}}</strong> (<strong>"Company,"</strong> <strong>"we,"</strong> <strong>"us,"</strong> or <strong>"our"</strong>), a {{company_entity_type}} registered at {{company_address}}, collects, uses, stores, shares, and protects personal data when you use our website at {{website_url}} and our services (collectively, the <strong>"Services"</strong>). Please read this Policy carefully.</p>
 
-<h2>2. How We Use Your Data</h2>
-<p>We use your data to: provide and improve the Service; send transactional emails; respond to support requests; comply with legal obligations.</p>
+<p>By accessing or using our Services, you acknowledge that you have read and understood this Privacy Policy. If you do not agree, please discontinue use of our Services.</p>
 
-<h2>3. Your Rights (GDPR)</h2>
-<p>If you are located in the EEA, you have the right to: access, correct, delete, or export your personal data; restrict or object to processing; withdraw consent at any time.</p>
+<h2>1. Data Controller Information</h2>
+<p>For the purposes of applicable data protection law (including the General Data Protection Regulation (GDPR) where applicable), the data controller is:</p>
+<p><strong>{{company_name}}</strong><br/>{{company_address}}<br/>Data Protection Officer (DPO): {{dpo_name}}<br/>DPO Email: {{dpo_email}}<br/>Privacy enquiries: {{privacy_email}}</p>
 
-<h2>4. Data Retention</h2>
-<p>We retain personal data for as long as necessary to provide the Service and comply with legal obligations, typically no longer than <strong>{{retention_period}}</strong>.</p>
+<h2>2. Personal Data We Collect</h2>
+<p>We collect the following categories of personal data:</p>
+<table style="width:100%;border-collapse:collapse;">
+  <tr style="background:#f8fafc;"><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Category</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Examples</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Source</th></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Identity Data</td><td style="padding:10px;border:1px solid #e2e8f0;">First name, last name, username, profile photo</td><td style="padding:10px;border:1px solid #e2e8f0;">Provided by you</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Contact Data</td><td style="padding:10px;border:1px solid #e2e8f0;">Email address, phone number, postal address</td><td style="padding:10px;border:1px solid #e2e8f0;">Provided by you</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Account Data</td><td style="padding:10px;border:1px solid #e2e8f0;">Login credentials, account settings, preferences</td><td style="padding:10px;border:1px solid #e2e8f0;">Provided by you</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Financial Data</td><td style="padding:10px;border:1px solid #e2e8f0;">Billing address, payment method (tokenised — card numbers are not stored by us)</td><td style="padding:10px;border:1px solid #e2e8f0;">Provided by you / payment processor</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Usage Data</td><td style="padding:10px;border:1px solid #e2e8f0;">IP address, browser type, pages visited, features used, timestamps</td><td style="padding:10px;border:1px solid #e2e8f0;">Automatically collected</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Device Data</td><td style="padding:10px;border:1px solid #e2e8f0;">Device ID, operating system, browser version</td><td style="padding:10px;border:1px solid #e2e8f0;">Automatically collected</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Communications</td><td style="padding:10px;border:1px solid #e2e8f0;">Support requests, feedback, survey responses</td><td style="padding:10px;border:1px solid #e2e8f0;">Provided by you</td></tr>
+</table>
 
-<h2>5. Contact</h2>
-<p>For privacy requests, contact our Data Protection Officer at <strong>{{dpo_email}}</strong>.</p>`),
+<h2>3. Legal Bases for Processing (GDPR)</h2>
+<p>We process your personal data on the following legal bases:</p>
+<ul>
+  <li><strong>Performance of a contract:</strong> Processing necessary to provide you with the Services you have requested.</li>
+  <li><strong>Legitimate interests:</strong> Processing necessary for our legitimate business interests (e.g., security, fraud prevention, analytics, product improvement), provided such interests are not overridden by your rights.</li>
+  <li><strong>Consent:</strong> Where we have obtained your explicit consent (e.g., marketing communications). You may withdraw consent at any time.</li>
+  <li><strong>Legal obligation:</strong> Processing required to comply with applicable laws.</li>
+</ul>
+
+<h2>4. How We Use Your Personal Data</h2>
+<p>We use your personal data to:</p>
+<ol>
+  <li>Create and manage your account and provide the Services;</li>
+  <li>Process transactions and send related notifications (receipts, invoices);</li>
+  <li>Send service-related communications (technical notices, security alerts, updates);</li>
+  <li>Respond to your enquiries and provide customer support;</li>
+  <li>Send marketing communications where you have opted in;</li>
+  <li>Monitor and analyse usage to improve and develop the Services;</li>
+  <li>Detect, prevent, and investigate fraud, security incidents, and abuse;</li>
+  <li>Comply with legal and regulatory obligations.</li>
+</ol>
+
+<h2>5. Cookies and Tracking Technologies</h2>
+<p>We use cookies and similar technologies (pixels, local storage) to recognise you, personalise content, and analyse traffic. You can control cookies through your browser settings or our cookie consent tool. Disabling certain cookies may affect the functionality of the Services. Categories of cookies we use: Strictly Necessary, Functional, Analytics, and Marketing (where consented).</p>
+
+<h2>6. Sharing of Personal Data</h2>
+<p>We do not sell your personal data. We may share your data with:</p>
+<ul>
+  <li><strong>Service providers:</strong> Trusted third-party vendors who process data on our behalf (hosting, payment processing, email delivery, analytics), subject to appropriate data processing agreements;</li>
+  <li><strong>Business transfers:</strong> In connection with a merger, acquisition, or sale of assets, your data may be transferred to the acquirer;</li>
+  <li><strong>Legal requirements:</strong> We may disclose data when required by law, court order, or to protect our legal rights;</li>
+  <li><strong>With your consent:</strong> For any other purpose with your explicit consent.</li>
+</ul>
+
+<h2>7. International Data Transfers</h2>
+<p>Your data may be transferred to, and processed in, countries outside your home jurisdiction. Where such transfers occur from the EEA/UK, we rely on: Standard Contractual Clauses approved by the European Commission; adequacy decisions; or other appropriate safeguards as required by applicable law.</p>
+
+<h2>8. Data Retention</h2>
+<p>We retain personal data for as long as necessary to provide the Services, comply with legal obligations, resolve disputes, and enforce our agreements. Typical retention periods are:</p>
+<ul>
+  <li>Account data: Duration of account plus {{account_retention_period}} following closure;</li>
+  <li>Financial records: {{financial_retention_period}} (as required by applicable tax law);</li>
+  <li>Marketing consent records: Until consent is withdrawn plus {{consent_retention_period}};</li>
+  <li>Support communications: {{support_retention_period}}.</li>
+</ul>
+
+<h2>9. Your Rights</h2>
+<p>Depending on your jurisdiction, you may have the following rights regarding your personal data:</p>
+<ul>
+  <li><strong>Access:</strong> Request a copy of the personal data we hold about you;</li>
+  <li><strong>Rectification:</strong> Request correction of inaccurate or incomplete data;</li>
+  <li><strong>Erasure:</strong> Request deletion of your data in certain circumstances ("right to be forgotten");</li>
+  <li><strong>Restriction:</strong> Request that we restrict processing of your data;</li>
+  <li><strong>Portability:</strong> Receive your data in a structured, machine-readable format;</li>
+  <li><strong>Objection:</strong> Object to processing based on legitimate interests or for direct marketing;</li>
+  <li><strong>Withdraw Consent:</strong> Withdraw consent at any time where processing is based on consent;</li>
+  <li><strong>Complaint:</strong> Lodge a complaint with your local data protection authority.</li>
+</ul>
+<p>To exercise any of these rights, contact us at <strong>{{privacy_email}}</strong>. We will respond within <strong>30 days</strong> (or as required by applicable law).</p>
+
+<h2>10. Security</h2>
+<p>We implement appropriate technical and organisational security measures, including encryption in transit (TLS) and at rest, access controls, regular security assessments, and staff training. However, no system is completely secure, and we cannot guarantee absolute security of your data.</p>
+
+<h2>11. Children's Privacy</h2>
+<p>Our Services are not directed to individuals under the age of <strong>{{minimum_age}}</strong>. We do not knowingly collect personal data from children under this age. If you believe we have inadvertently collected such data, please contact us and we will delete it promptly.</p>
+
+<h2>12. Third-Party Links</h2>
+<p>Our Services may contain links to third-party websites. We are not responsible for the privacy practices of those websites and encourage you to review their privacy policies.</p>
+
+<h2>13. Changes to This Policy</h2>
+<p>We may update this Privacy Policy from time to time. We will notify you of material changes by posting the updated policy with a new effective date and, where appropriate, by email. Your continued use of the Services after the effective date constitutes acceptance of the updated policy.</p>
+
+<h2>14. Contact Us</h2>
+<p>If you have any questions about this Privacy Policy or our data practices, please contact:<br/><strong>{{company_name}}</strong><br/>{{company_address}}<br/>Email: {{privacy_email}}<br/>DPO: {{dpo_email}}</p>`),
 
   // ── Sales ───────────────────────────────────────────────────────────────
 
@@ -396,24 +707,105 @@ const templates = [
   t('Invoice',
     'Professional invoice with line items and payment details.',
     'Sales', ['invoice', 'billing'],
-    `<p>Invoice #: <strong>{{invoice_number}}</strong><br/>Date: <strong>{{invoice_date}}</strong><br/>Due Date: <strong>{{due_date}}</strong></p>
-<hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0;" />
-<p><strong>Bill To:</strong><br/>{{client_name}}<br/>{{client_address}}<br/>{{client_email}}</p>
-<p><strong>From:</strong><br/>{{your_company}}<br/>{{your_address}}<br/>{{your_email}}</p>
-
-<h2>Items</h2>
-<table style="width:100%;border-collapse:collapse;">
-  <tr style="background:#f8fafc;"><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Description</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Qty</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Unit Price</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Amount</th></tr>
-  <tr><td style="padding:10px;border:1px solid #e2e8f0;">{{item_1_description}}</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{item_1_qty}}</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{item_1_price}}</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{item_1_total}}</td></tr>
-  <tr><td style="padding:10px;border:1px solid #e2e8f0;">{{item_2_description}}</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{item_2_qty}}</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{item_2_price}}</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{item_2_total}}</td></tr>
-  <tr style="background:#f8fafc;"><td colspan="3" style="padding:10px;border:1px solid #e2e8f0;text-align:right;font-weight:600;">Subtotal</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{subtotal}}</td></tr>
-  <tr><td colspan="3" style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Tax ({{tax_rate}}%)</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{tax_amount}}</td></tr>
-  <tr style="background:#f0f9ff;font-weight:700;"><td colspan="3" style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Total Due</td><td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{total_due}}</td></tr>
+    `<table style="width:100%;border-collapse:collapse;margin-bottom:32px;">
+  <tr>
+    <td style="vertical-align:top;width:50%;">
+      <p style="margin:0;font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">From</p>
+      <p style="margin:4px 0 0;"><strong>{{vendor_company_name}}</strong></p>
+      <p style="margin:2px 0;font-size:14px;color:#475569;">{{vendor_address_line_1}}</p>
+      <p style="margin:2px 0;font-size:14px;color:#475569;">{{vendor_city_state_zip}}</p>
+      <p style="margin:2px 0;font-size:14px;color:#475569;">{{vendor_country}}</p>
+      <p style="margin:2px 0;font-size:14px;color:#475569;">Tax ID / VAT: {{vendor_tax_id}}</p>
+      <p style="margin:2px 0;font-size:14px;color:#475569;">Email: {{vendor_email}}</p>
+    </td>
+    <td style="vertical-align:top;width:50%;text-align:right;">
+      <p style="margin:0;font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Invoice Details</p>
+      <p style="margin:4px 0 0;"><strong>Invoice #:</strong> {{invoice_number}}</p>
+      <p style="margin:2px 0;font-size:14px;"><strong>Issue Date:</strong> {{issue_date}}</p>
+      <p style="margin:2px 0;font-size:14px;"><strong>Due Date:</strong> {{due_date}}</p>
+      <p style="margin:2px 0;font-size:14px;"><strong>PO Number:</strong> {{po_number}}</p>
+    </td>
+  </tr>
 </table>
 
-<h2>Payment Instructions</h2>
-<p>Please transfer payment to: <strong>{{bank_details}}</strong>. Reference: Invoice #{{invoice_number}}.</p>
-<p>Late payments may incur a <strong>{{late_fee}}%</strong> monthly charge.</p>`),
+<table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+  <tr>
+    <td style="padding:12px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:40%;">
+      Bill To
+    </td>
+    <td style="padding:12px;border:1px solid #e2e8f0;">
+      <strong>{{client_company_name}}</strong><br/>
+      Attn: {{client_contact_name}}<br/>
+      {{client_address_line_1}}<br/>
+      {{client_city_state_zip}}<br/>
+      {{client_country}}<br/>
+      Email: {{client_billing_email}}
+    </td>
+  </tr>
+</table>
+
+<h2>Services Rendered</h2>
+<table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+  <tr style="background:#f8fafc;">
+    <th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Description</th>
+    <th style="padding:10px;border:1px solid #e2e8f0;text-align:center;">Qty / Hrs</th>
+    <th style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Unit Price</th>
+    <th style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Amount</th>
+  </tr>
+  <tr>
+    <td style="padding:10px;border:1px solid #e2e8f0;">{{line_item_1_description}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:center;">{{line_item_1_qty}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{line_item_1_unit_price}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{line_item_1_amount}}</td>
+  </tr>
+  <tr>
+    <td style="padding:10px;border:1px solid #e2e8f0;">{{line_item_2_description}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:center;">{{line_item_2_qty}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{line_item_2_unit_price}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{line_item_2_amount}}</td>
+  </tr>
+  <tr>
+    <td style="padding:10px;border:1px solid #e2e8f0;">{{line_item_3_description}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:center;">{{line_item_3_qty}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{line_item_3_unit_price}}</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{line_item_3_amount}}</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Subtotal</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{subtotal}}</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Tax / VAT ({{tax_rate}}%)</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">{{tax_amount}}</td>
+  </tr>
+  <tr>
+    <td colspan="3" style="padding:10px;border:1px solid #e2e8f0;text-align:right;">Discount</td>
+    <td style="padding:10px;border:1px solid #e2e8f0;text-align:right;">-{{discount_amount}}</td>
+  </tr>
+  <tr style="background:#f0f9ff;font-weight:700;font-size:16px;">
+    <td colspan="3" style="padding:12px;border:1px solid #e2e8f0;text-align:right;">TOTAL DUE</td>
+    <td style="padding:12px;border:1px solid #e2e8f0;text-align:right;">{{total_due}} {{currency}}</td>
+  </tr>
+</table>
+
+<h2>Payment Terms and Instructions</h2>
+<p><strong>Payment Due Date:</strong> {{due_date}}</p>
+<p><strong>Accepted Payment Methods:</strong> {{payment_methods}}</p>
+<table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:35%">Bank Name</td><td style="padding:8px;border:1px solid #e2e8f0;">{{bank_name}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Account Name</td><td style="padding:8px;border:1px solid #e2e8f0;">{{bank_account_name}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Account Number / IBAN</td><td style="padding:8px;border:1px solid #e2e8f0;">{{bank_account_number}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Routing / SWIFT / BIC</td><td style="padding:8px;border:1px solid #e2e8f0;">{{bank_routing_swift}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Reference</td><td style="padding:8px;border:1px solid #e2e8f0;">Invoice #{{invoice_number}}</td></tr>
+</table>
+
+<h2>Late Payment Policy</h2>
+<p>Invoices not paid by the due date shall be subject to a late payment fee of <strong>1.5% per month</strong> (18% per annum) or the maximum rate permitted by applicable law, whichever is lower, calculated from the due date until the date of actual payment. The vendor reserves the right to suspend services, withhold deliverables, and engage collection remedies for overdue accounts. In the event of a dispute over any invoice amount, Client must notify Vendor in writing within <strong>10 business days</strong> of the invoice date, specifying the nature of the dispute in reasonable detail.</p>
+
+<h2>Notes</h2>
+<p>{{invoice_notes}}</p>
+
+<p style="font-size:13px;color:#64748b;margin-top:24px;">This invoice was prepared by {{vendor_company_name}}. Please include the invoice number in all payment correspondence. For billing enquiries, contact {{vendor_billing_email}}.</p>`),
 
   t('Quote / Estimate',
     'Itemized cost estimate for products or services.',
@@ -1039,22 +1431,79 @@ const templates = [
   t('Software License Agreement',
     'Perpetual or term license for proprietary software.',
     'Tech', ['license'],
-    `<p>This Software License Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> between <strong>{{licensor_name}}</strong> (<strong>"Licensor"</strong>) and <strong>{{licensee_name}}</strong> (<strong>"Licensee"</strong>).</p>
+    `<p>This Software License Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> by and between:</p>
 
-<h2>1. License Grant</h2>
-<p>Licensor grants Licensee a <strong>{{license_type}}</strong> (non-exclusive, non-transferable) license to use <strong>{{software_name}}</strong> (<strong>"Software"</strong>) for internal business purposes only.</p>
+<p><strong>{{licensor_name}}</strong>, a {{licensor_entity_type}} with its principal place of business at {{licensor_address}} (<strong>"Licensor"</strong>); and</p>
 
-<h2>2. Restrictions</h2>
-<p>Licensee shall not: (a) sublicense, sell, or transfer the Software; (b) reverse engineer, decompile, or disassemble the Software; (c) use the Software to develop a competing product.</p>
+<p><strong>{{licensee_name}}</strong>, a {{licensee_entity_type}} with its principal place of business at {{licensee_address}} (<strong>"Licensee"</strong>).</p>
 
-<h2>3. Fees</h2>
-<p>License fee: <strong>{{license_fee}}</strong>, payable as <strong>{{payment_terms}}</strong>. Annual maintenance and support: <strong>{{support_fee}}</strong>.</p>
+<h2>1. Definitions</h2>
+<p><strong>"Software"</strong> means the {{software_name}} computer program, including all object code, source code (if provided), associated documentation, updates, upgrades, patches, and modifications provided by Licensor.</p>
+<p><strong>"Documentation"</strong> means all user manuals, technical specifications, and other written or electronic materials provided by Licensor relating to the Software.</p>
+<p><strong>"Authorised Users"</strong> means the Licensee's employees, contractors, and agents who are permitted to access and use the Software under this Agreement, up to the number of seats or user licences purchased.</p>
+<p><strong>"Intellectual Property Rights"</strong> means all patents, copyrights, trademarks, trade secrets, database rights, and any other form of intellectual property recognised in any jurisdiction.</p>
 
-<h2>4. Term</h2>
-<p>This Agreement is effective for <strong>{{term}}</strong> and renews automatically unless terminated with <strong>{{notice_days}} days'</strong> written notice.</p>
+<h2>2. Grant of Licence</h2>
+<p>Subject to the terms and conditions of this Agreement and timely payment of all applicable licence fees, Licensor hereby grants to Licensee a <strong>{{licence_type}}</strong> (non-exclusive / exclusive), non-transferable, non-sublicensable, revocable licence to:</p>
+<ol type="a">
+  <li>Install and use the Software on up to <strong>{{number_of_seats}}</strong> devices or user accounts;</li>
+  <li>Use the Documentation in connection with the permitted use of the Software; and</li>
+  <li>Make a reasonable number of copies of the Software solely for backup and archival purposes.</li>
+</ol>
+<p>The licence granted herein is limited to Licensee's internal business purposes and does not include any rights not expressly stated in this Section 2.</p>
 
-<h2>5. Warranty Disclaimer</h2>
-<p>THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. LICENSOR'S TOTAL LIABILITY SHALL NOT EXCEED FEES PAID IN THE PRIOR 12 MONTHS.</p>`),
+<h2>3. Restrictions</h2>
+<p>Licensee shall not, and shall not permit any third party to:</p>
+<ol type="a">
+  <li>Copy, modify, adapt, translate, or create derivative works of the Software or Documentation;</li>
+  <li>Reverse engineer, disassemble, decompile, or otherwise attempt to derive the source code of the Software, except to the extent permitted by applicable law;</li>
+  <li>Rent, lease, lend, sell, sublicence, assign, or otherwise transfer the Software or any rights therein to any third party;</li>
+  <li>Remove or alter any proprietary notices, labels, or marks on the Software or Documentation;</li>
+  <li>Use the Software to provide services to third parties on a service bureau, time-sharing, or similar basis without Licensor's prior written consent;</li>
+  <li>Use the Software in violation of any applicable law, regulation, or export control restriction.</li>
+</ol>
+
+<h2>4. Licence Fees and Payment</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:40%">Licence Type</td><td style="padding:8px;border:1px solid #e2e8f0;">{{licence_tier}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Number of Seats / Users</td><td style="padding:8px;border:1px solid #e2e8f0;">{{number_of_seats}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Annual Licence Fee</td><td style="padding:8px;border:1px solid #e2e8f0;">{{annual_fee}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Payment Due</td><td style="padding:8px;border:1px solid #e2e8f0;">{{payment_due_date}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Renewal</td><td style="padding:8px;border:1px solid #e2e8f0;">Auto-renews annually unless cancelled with 30 days' notice</td></tr>
+</table>
+<p>Licensor may increase licence fees upon <strong>60 days'</strong> written notice prior to renewal. All fees are non-refundable except as expressly provided herein.</p>
+
+<h2>5. Intellectual Property Ownership</h2>
+<p>The Software, Documentation, and all Intellectual Property Rights therein are and shall remain the exclusive property of Licensor. Licensee acquires no ownership interest in the Software under this Agreement. Any feedback, suggestions, or improvements provided by Licensee regarding the Software may be used by Licensor without restriction or compensation.</p>
+
+<h2>6. Support and Maintenance</h2>
+<p>During the licence term and subject to payment of any applicable support fees, Licensor shall provide: (a) email and/or phone support during Licensor's standard business hours; (b) bug fixes and patches; and (c) access to new minor versions of the Software. Major version upgrades may be subject to additional fees.</p>
+
+<h2>7. Confidentiality</h2>
+<p>Each Party acknowledges that in connection with this Agreement it may receive the other Party's Confidential Information. Each Party agrees to hold such information in confidence, use it only for the purposes of this Agreement, and not disclose it to third parties without the other Party's prior written consent. The Software, its source code (if disclosed), and its technical specifications shall be considered Licensor's Confidential Information regardless of how they are marked.</p>
+
+<h2>8. Warranties and Disclaimers</h2>
+<p><strong>Limited Warranty.</strong> Licensor warrants that, for a period of <strong>90 days</strong> from the date of initial delivery, the Software will perform substantially in accordance with the Documentation when operated on supported hardware and operating systems. Licensee's exclusive remedy for breach of this warranty is, at Licensor's option, repair or replacement of the Software or a refund of fees paid for the non-conforming Software.</p>
+<p><strong>DISCLAIMER. EXCEPT AS SET FORTH IN THIS SECTION, THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND. LICENSOR EXPRESSLY DISCLAIMS ALL OTHER WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ANY WARRANTIES ARISING FROM COURSE OF DEALING OR USAGE OF TRADE.</strong></p>
+
+<h2>9. Limitation of Liability</h2>
+<p>IN NO EVENT SHALL LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING LOSS OF PROFITS, DATA, OR BUSINESS, EVEN IF ADVISED OF THE POSSIBILITY THEREOF. LICENSOR'S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE TOTAL LICENCE FEES PAID BY LICENSEE IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM.</p>
+
+<h2>10. Indemnification</h2>
+<p><strong>By Licensor.</strong> Licensor shall defend, indemnify, and hold harmless Licensee from and against any third-party claim that the Software, as delivered and used in accordance with this Agreement, infringes any patent, copyright, or trademark of a third party, provided Licensee promptly notifies Licensor of such claim, gives Licensor sole control of the defence, and cooperates reasonably.</p>
+<p><strong>By Licensee.</strong> Licensee shall defend, indemnify, and hold harmless Licensor from any claim arising from Licensee's misuse of the Software or breach of this Agreement.</p>
+
+<h2>11. Term and Termination</h2>
+<p>This Agreement commences on the Effective Date and continues for an initial term of <strong>{{initial_term}}</strong> (the <strong>"Term"</strong>), automatically renewing for successive one-year periods unless either Party provides written notice of non-renewal at least <strong>30 days</strong> before renewal.</p>
+<p>Licensor may terminate this Agreement immediately upon written notice if Licensee: (a) materially breaches this Agreement and fails to cure within <strong>30 days</strong> of notice; (b) becomes insolvent or files for bankruptcy; or (c) infringes Licensor's intellectual property. Upon termination, Licensee shall immediately cease using the Software, destroy all copies, and certify such destruction in writing.</p>
+
+<h2>12. General Provisions</h2>
+<p><strong>Governing Law.</strong> This Agreement is governed by the laws of <strong>{{governing_law}}</strong>. Any disputes shall be resolved in the courts of <strong>{{jurisdiction_courts}}</strong>.</p>
+<p><strong>Export Compliance.</strong> Licensee shall comply with all applicable export and import laws and regulations and shall not export the Software to any country, person, or entity subject to applicable trade restrictions.</p>
+<p><strong>Entire Agreement.</strong> This Agreement constitutes the entire agreement between the Parties with respect to the Software and supersedes all prior agreements, understandings, and representations.</p>
+<p><strong>Assignment.</strong> Licensee may not assign this Agreement without Licensor's prior written consent. Licensor may assign this Agreement in connection with a merger, acquisition, or sale of all or substantially all of its assets.</p>
+
+<div style="margin-top:48px;"><hr style="border:none;border-top:1px solid #e2e8f0;margin-bottom:32px;"/><table style="width:100%;border-collapse:collapse;"><tr><td style="width:50%;padding-right:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Licensor — {{licensor_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td><td style="width:50%;padding-left:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Licensee — {{licensee_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td></tr></table></div>`),
 
   t('SaaS Subscription Agreement',
     'Cloud-hosted SaaS subscription terms for businesses.',
@@ -1226,22 +1675,68 @@ const templates = [
   t('Freelance Services Agreement',
     'Lightweight project-based agreement for freelancers.',
     'Legal', ['freelance'],
-    `<p>This Freelance Services Agreement is entered into as of <strong>{{date}}</strong> between <strong>{{client_name}}</strong> (<strong>"Client"</strong>) and <strong>{{freelancer_name}}</strong> (<strong>"Freelancer"</strong>).</p>
+    `<p>This Freelance Service Agreement (<strong>"Agreement"</strong>) is entered into as of <strong>{{effective_date}}</strong> by and between:</p>
 
-<h2>1. Project</h2>
-<p>Freelancer agrees to complete the following project: <strong>{{project_description}}</strong>.</p>
+<p><strong>{{client_name}}</strong>, a {{client_entity_type}} with its principal place of business at {{client_address}} (<strong>"Client"</strong>); and</p>
 
-<h2>2. Fee &amp; Payment</h2>
-<p>Client agrees to pay Freelancer <strong>{{project_fee}}</strong>. Payment schedule: <strong>{{payment_schedule}}</strong>.</p>
+<p><strong>{{freelancer_name}}</strong>, an individual / {{freelancer_entity_type}} with a principal place of business at {{freelancer_address}} (<strong>"Freelancer"</strong>).</p>
 
-<h2>3. Timeline</h2>
-<p>Project to be completed by: <strong>{{deadline}}</strong>. Revisions included: <strong>{{revision_count}} rounds</strong>.</p>
+<h2>1. Services and Deliverables</h2>
+<p>Freelancer agrees to perform the following services and provide the following deliverables (collectively, <strong>"Services"</strong>):</p>
+<p>{{scope_of_work}}</p>
+<p>Freelancer shall perform the Services in a professional and workmanlike manner, consistent with industry standards. Any changes to the scope of Services must be agreed upon in writing via a signed Change Order before work begins.</p>
 
-<h2>4. Ownership</h2>
-<p>All deliverables become Client's property upon receipt of full payment.</p>
+<h2>2. Project Timeline</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr style="background:#f8fafc;"><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Milestone</th><th style="padding:10px;border:1px solid #e2e8f0;text-align:left;">Due Date</th></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Project Kickoff</td><td style="padding:10px;border:1px solid #e2e8f0;">{{kickoff_date}}</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">First Draft / Prototype</td><td style="padding:10px;border:1px solid #e2e8f0;">{{draft_date}}</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Client Review Period</td><td style="padding:10px;border:1px solid #e2e8f0;">{{review_period}}</td></tr>
+  <tr><td style="padding:10px;border:1px solid #e2e8f0;">Final Delivery</td><td style="padding:10px;border:1px solid #e2e8f0;">{{delivery_date}}</td></tr>
+</table>
+<p>Client acknowledges that timelines are contingent upon Client's timely provision of feedback, materials, and approvals. Delays caused by Client may result in a proportional extension of deadlines.</p>
 
-<h2>5. Relationship</h2>
-<p>Freelancer is an independent contractor. This Agreement does not create an employment relationship.</p>`),
+<h2>3. Compensation and Payment Terms</h2>
+<p>Client agrees to pay Freelancer as follows:</p>
+<table style="width:100%;border-collapse:collapse;">
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;width:40%">Fee Structure</td><td style="padding:8px;border:1px solid #e2e8f0;">{{fee_structure}} (e.g., fixed-price / hourly)</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Total / Rate</td><td style="padding:8px;border:1px solid #e2e8f0;">{{total_fee_or_rate}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Deposit (due on signing)</td><td style="padding:8px;border:1px solid #e2e8f0;">{{deposit_amount}} ({{deposit_percentage}}%)</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Remaining Balance</td><td style="padding:8px;border:1px solid #e2e8f0;">{{balance_amount}} due upon {{balance_trigger}}</td></tr>
+  <tr><td style="padding:8px;border:1px solid #e2e8f0;font-weight:600;background:#f8fafc;">Payment Terms</td><td style="padding:8px;border:1px solid #e2e8f0;">Net {{payment_due_days}} days from invoice date</td></tr>
+</table>
+<p>Late payments shall accrue interest at the rate of <strong>1.5% per month</strong> (or the maximum rate permitted by law, whichever is lower) from the date payment was due. Freelancer may suspend Services for accounts overdue by more than <strong>10 business days</strong> without liability.</p>
+
+<h2>4. Expenses</h2>
+<p>Freelancer shall not incur expenses on Client's behalf without prior written approval. Pre-approved, reasonable out-of-pocket expenses will be reimbursed within <strong>30 days</strong> of submission of receipts.</p>
+
+<h2>5. Independent Contractor Status</h2>
+<p>Freelancer is an independent contractor, not an employee, agent, or partner of Client. Freelancer is solely responsible for all federal, state, and local taxes, social security contributions, insurance, and other statutory obligations arising from compensation paid under this Agreement. Nothing in this Agreement creates an employment, agency, or joint venture relationship.</p>
+
+<h2>6. Intellectual Property and Ownership</h2>
+<p><strong>Work Product.</strong> Upon receipt of full payment, all original work product, deliverables, and materials created specifically for Client under this Agreement (the <strong>"Work Product"</strong>) shall be assigned to and become the exclusive property of Client, including all associated intellectual property rights.</p>
+<p><strong>Pre-existing IP.</strong> Freelancer retains ownership of all pre-existing tools, frameworks, libraries, processes, methodologies, and know-how developed prior to or independently of this Agreement (<strong>"Background IP"</strong>). To the extent any Background IP is incorporated into the Work Product, Freelancer grants Client a non-exclusive, perpetual, royalty-free licence to use such Background IP solely as part of the Work Product.</p>
+<p><strong>Moral Rights.</strong> Freelancer waives any moral rights in the Work Product to the fullest extent permitted by law.</p>
+
+<h2>7. Confidentiality</h2>
+<p>Freelancer agrees to keep confidential all non-public information received from Client in connection with this Agreement, including but not limited to business plans, technical data, financial information, and customer data. This obligation survives termination for a period of <strong>3 years</strong>.</p>
+
+<h2>8. Representations and Warranties</h2>
+<p>Freelancer represents and warrants that: (a) Freelancer has the full right and authority to enter into this Agreement; (b) the Services and Work Product will not infringe any third-party intellectual property rights; (c) the Work Product will be original; and (d) Freelancer is not subject to any agreement that would restrict performance of Services hereunder.</p>
+
+<h2>9. Limitation of Liability</h2>
+<p>IN NO EVENT SHALL EITHER PARTY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES. FREELANCER'S TOTAL LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE TOTAL FEES PAID BY CLIENT IN THE THREE (3) MONTHS PRECEDING THE CLAIM.</p>
+
+<h2>10. Term and Termination</h2>
+<p>This Agreement commences on the Effective Date and continues until the Services are completed and all payments are made, unless earlier terminated. Either Party may terminate this Agreement upon <strong>{{notice_days}} days'</strong> written notice. Upon termination, Client shall pay for all Services rendered and expenses incurred through the termination date. Work Product shall not transfer to Client until all outstanding amounts are paid in full.</p>
+
+<h2>11. Dispute Resolution and Governing Law</h2>
+<p>This Agreement is governed by the laws of <strong>{{governing_law}}</strong>. Any dispute shall first be submitted to good-faith negotiation. If unresolved within 30 days, disputes shall be resolved by binding arbitration in <strong>{{arbitration_venue}}</strong> under the rules of <strong>{{arbitration_body}}</strong>.</p>
+
+<h2>12. General</h2>
+<p>This Agreement constitutes the entire agreement between the Parties and supersedes all prior discussions. It may be amended only in writing signed by both Parties. If any provision is held invalid, the remaining provisions remain in effect. This Agreement may be executed electronically.</p>
+
+<div style="margin-top:48px;"><hr style="border:none;border-top:1px solid #e2e8f0;margin-bottom:32px;"/><table style="width:100%;border-collapse:collapse;"><tr><td style="width:50%;padding-right:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Client — {{client_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td><td style="width:50%;padding-left:24px;vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;">Freelancer — {{freelancer_name}}</p><div style="border-bottom:1.5px solid #334155;height:48px;margin-bottom:8px;"></div><p style="margin:0;font-size:12px;color:#94a3b8;">Name: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Title: ___________________________</p><p style="margin:4px 0 0;font-size:12px;color:#94a3b8;">Date: ___________________________</p></td></tr></table></div>`),
 
   t('General Release of Liability',
     'Waiver releasing a party from liability for a specific activity.',

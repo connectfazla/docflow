@@ -9,6 +9,32 @@ import { getSettings } from '@/lib/settings'
  * Uses the API key + provider configured by the super admin.
  */
 
+const SYSTEM_PROMPT = `You are an expert legal document drafter with 20 years of experience. Your job is to generate complete, professional, legally binding documents.
+
+CRITICAL RULES:
+1. Output ONLY clean semantic HTML — no markdown, no code fences, no explanations, no \`\`\`html blocks.
+2. Do NOT wrap in <html>, <head>, or <body> tags.
+3. Use ONLY these tags: <h1> <h2> <h3> <p> <ol> <ul> <li> <strong> <em> <table> <thead> <tbody> <tr> <th> <td> <br> <hr>
+4. Do NOT add extra blank <p></p> tags between sections — one <p> per paragraph only.
+5. Do NOT add inline styles unless strictly necessary for a table.
+6. Every document MUST be comprehensive and legally substantial — minimum 800 words.
+7. Include: parties section, definitions, all major legal clauses, obligations, warranties, liability limitations, termination, dispute resolution, governing law, and a signature block.
+8. Use {{placeholder}} syntax for fields that need to be filled in (e.g. {{party_name}}, {{date}}, {{address}}).
+9. Structure: h1 for document title, h2 for numbered sections, p for body text, ol/ul for lists.`
+
+function cleanHtml(raw: string): string {
+  return raw
+    // strip markdown code fences
+    .replace(/```html?\n?/gi, '').replace(/```\n?/g, '')
+    // collapse 3+ consecutive newlines to 2
+    .replace(/\n{3,}/g, '\n\n')
+    // remove empty paragraph tags with only whitespace/nbsp
+    .replace(/<p[^>]*>(\s|&nbsp;)*<\/p>/gi, '')
+    // collapse multiple <br> in a row
+    .replace(/(<br\s*\/?>\s*){3,}/gi, '<br>')
+    .trim()
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -31,6 +57,8 @@ export async function POST(req: NextRequest) {
     }, { status: 503 })
   }
 
+  const userContent = `${context ? `Existing document context:\n${context}\n\n` : ''}Generate the following document: ${prompt}`
+
   try {
     if (provider === 'anthropic') {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -42,18 +70,14 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           model,
-          max_tokens: 2048,
-          messages: [
-            {
-              role: 'user',
-              content: `${context ? `Context:\n${context}\n\n` : ''}Request: ${prompt}\n\nRespond with clean, professional HTML suitable for pasting into a document editor. No <html>/<body> wrappers.`,
-            },
-          ],
+          max_tokens: 4096,
+          system: SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: userContent }],
         }),
       })
       const data = await res.json()
       if (!res.ok) return NextResponse.json({ error: data.error?.message ?? 'AI error' }, { status: 502 })
-      const text = data.content?.[0]?.text ?? ''
+      const text = cleanHtml(data.content?.[0]?.text ?? '')
       return NextResponse.json({ html: text })
     }
 
@@ -67,16 +91,17 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           model,
+          max_tokens: 4096,
           messages: [
-            { role: 'system', content: 'You are a professional document-drafting assistant. Always respond with clean, semantic HTML suitable for a rich-text editor. Never wrap in <html>/<body>.' },
-            { role: 'user', content: `${context ? `Context:\n${context}\n\n` : ''}${prompt}` },
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: userContent },
           ],
-          temperature: 0.5,
+          temperature: 0.3,
         }),
       })
       const data = await res.json()
       if (!res.ok) return NextResponse.json({ error: data.error?.message ?? 'Kimi AI error' }, { status: 502 })
-      const text = data.choices?.[0]?.message?.content ?? ''
+      const text = cleanHtml(data.choices?.[0]?.message?.content ?? '')
       return NextResponse.json({ html: text })
     }
 
@@ -89,16 +114,17 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         model,
+        max_tokens: 4096,
         messages: [
-          { role: 'system', content: 'You are a professional document-drafting assistant. Always respond with clean, semantic HTML suitable for a rich-text editor. Never wrap in <html>/<body>.' },
-          { role: 'user', content: `${context ? `Context:\n${context}\n\n` : ''}${prompt}` },
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userContent },
         ],
-        temperature: 0.5,
+        temperature: 0.3,
       }),
     })
     const data = await res.json()
     if (!res.ok) return NextResponse.json({ error: data.error?.message ?? 'AI error' }, { status: 502 })
-    const text = data.choices?.[0]?.message?.content ?? ''
+    const text = cleanHtml(data.choices?.[0]?.message?.content ?? '')
     return NextResponse.json({ html: text })
   } catch (e: any) {
     return NextResponse.json({ error: e.message ?? 'AI request failed' }, { status: 500 })
