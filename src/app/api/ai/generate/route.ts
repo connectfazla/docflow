@@ -19,7 +19,11 @@ export async function POST(req: NextRequest) {
   const s = await getSettings(['ai.provider', 'ai.apiKey', 'ai.model'])
   const provider = s['ai.provider'] || 'openai'
   const apiKey = s['ai.apiKey']
-  const model = s['ai.model'] || (provider === 'anthropic' ? 'claude-3-5-sonnet-latest' : 'gpt-4o-mini')
+  const defaultModel =
+    provider === 'anthropic' ? 'claude-3-5-sonnet-latest' :
+    provider === 'kimi'      ? 'moonshot-v1-8k' :
+    'gpt-4o-mini'
+  const model = s['ai.model'] || defaultModel
 
   if (!apiKey) {
     return NextResponse.json({
@@ -50,6 +54,29 @@ export async function POST(req: NextRequest) {
       const data = await res.json()
       if (!res.ok) return NextResponse.json({ error: data.error?.message ?? 'AI error' }, { status: 502 })
       const text = data.content?.[0]?.text ?? ''
+      return NextResponse.json({ html: text })
+    }
+
+    // Kimi (Moonshot) — OpenAI-compatible
+    if (provider === 'kimi') {
+      const res = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: 'system', content: 'You are a professional document-drafting assistant. Always respond with clean, semantic HTML suitable for a rich-text editor. Never wrap in <html>/<body>.' },
+            { role: 'user', content: `${context ? `Context:\n${context}\n\n` : ''}${prompt}` },
+          ],
+          temperature: 0.5,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) return NextResponse.json({ error: data.error?.message ?? 'Kimi AI error' }, { status: 502 })
+      const text = data.choices?.[0]?.message?.content ?? ''
       return NextResponse.json({ html: text })
     }
 

@@ -12,11 +12,12 @@ export function SettingFormClient({ initial }: { initial: Record<string, string>
           options: [
             { value: 'openai',    label: 'OpenAI (gpt-4o, gpt-4o-mini)' },
             { value: 'anthropic', label: 'Anthropic (Claude)' },
+            { value: 'kimi',      label: 'Kimi / Moonshot AI (moonshot-v1-8k)' },
           ],
           hint: 'Pick the provider that matches your API key.',
         },
         { key: 'ai.apiKey', label: 'API Key', type: 'password', placeholder: 'sk-…', hint: 'Stored encrypted. Leave unchanged to keep existing key.' },
-        { key: 'ai.model', label: 'Model (optional)', placeholder: 'gpt-4o-mini / claude-3-5-sonnet-latest', hint: 'Defaults: gpt-4o-mini or claude-3-5-sonnet-latest' },
+        { key: 'ai.model', label: 'Model (optional)', placeholder: 'gpt-4o-mini / claude-3-5-sonnet-latest / moonshot-v1-8k', hint: 'Defaults: gpt-4o-mini · claude-3-5-sonnet-latest · moonshot-v1-8k' },
       ]}
       initialValues={initial}
     />
