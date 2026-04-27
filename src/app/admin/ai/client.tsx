@@ -22,7 +22,7 @@ export function SettingFormClient({ initial }: { initial: Record<string, string>
           options: [
             { value: 'openai',    label: 'OpenAI (gpt-4o, gpt-4o-mini)' },
             { value: 'anthropic', label: 'Anthropic (Claude)' },
-            { value: 'kimi',      label: 'Kimi / Moonshot AI (moonshot-v1-8k)' },
+            { value: 'kimi',      label: 'Kimi / Moonshot AI (moonshot-v1-8k, moonshot-v1-32k)' },
           ],
           hint: 'Pick the provider that matches your API key.',
         },

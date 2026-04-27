@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (provider === 'kimi') {
-      const res = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+      const res = await fetch('https://api.moonshot.ai/v1/chat/completions', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
