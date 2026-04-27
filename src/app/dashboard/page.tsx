@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   FileText, Clock, CheckCircle, TrendingUp, Eye, Send,
@@ -11,7 +12,6 @@ import { StatusBadge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/store'
 import { useSession } from 'next-auth/react'
-import { mockActivity, chartData, pipelineData } from '@/lib/mock-data'
 import { formatRelative } from '@/lib/utils'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
@@ -28,9 +28,26 @@ const activityIcons: Record<string, { icon: React.ReactNode; color: string }> = 
   commented: { icon: <FileText className="w-3.5 h-3.5" />, color: 'text-purple-600 bg-purple-100' },
 }
 
+type AnalyticsData = {
+  pipelineData: { name: string; value: number; color: string }[]
+  chartData: { month: string; sent: number; signed: number; completed: number }[]
+  activity: { id: string; type: string; actorName: string; documentTitle: string; timestamp: string }[]
+}
+
 export default function DashboardPage() {
   const { documents } = useAppStore()
   const { data: session } = useSession()
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
+
+  useEffect(() => {
+    fetch('/api/analytics')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => d && setAnalytics(d))
+  }, [])
+
+  const pipelineData = analytics?.pipelineData ?? []
+  const chartData = analytics?.chartData ?? []
+  const activity = analytics?.activity ?? []
 
   const recentDocs = documents.slice(0, 5)
   const needsAttention = documents.filter(d => d.status === 'viewed' || d.status === 'sent').slice(0, 3)
@@ -257,20 +274,22 @@ export default function DashboardPage() {
               <h3 className="font-semibold text-slate-900">Activity</h3>
             </div>
             <div className="p-4 space-y-3">
-              {mockActivity.slice(0, 6).map((activity) => {
-                const config = activityIcons[activity.type] ?? activityIcons.created
+              {activity.length === 0 ? (
+                <p className="text-xs text-slate-400 text-center py-4">No activity yet</p>
+              ) : activity.slice(0, 6).map((item) => {
+                const config = activityIcons[item.type] ?? activityIcons.created
                 return (
-                  <div key={activity.id} className="flex items-start gap-3">
+                  <div key={item.id} className="flex items-start gap-3">
                     <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${config.color}`}>
                       {config.icon}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-slate-600 leading-relaxed">
-                        <span className="font-medium text-slate-800">{activity.actorName}</span>{' '}
-                        <span className="text-slate-500">{activity.type}</span>{' '}
-                        <span className="font-medium text-slate-800 truncate">{activity.documentTitle}</span>
+                        <span className="font-medium text-slate-800">{item.actorName}</span>{' '}
+                        <span className="text-slate-500">{item.type}</span>{' '}
+                        <span className="font-medium text-slate-800 truncate">{item.documentTitle}</span>
                       </p>
-                      <p className="text-xs text-slate-400 mt-0.5">{formatRelative(activity.timestamp)}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{formatRelative(item.timestamp)}</p>
                     </div>
                   </div>
                 )

@@ -30,19 +30,15 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     Array.isArray(body.recipients) ? body.recipients : []
   const message: string = body.message ?? ''
 
-  if (!recipients.length) {
-    return NextResponse.json({ error: 'At least one recipient is required.' }, { status: 400 })
-  }
-
-  // Create share token + save recipients
+  // Create share token + save recipients (recipients are optional — link-only sharing is allowed)
   const shareToken = doc.shareToken ?? randomBytes(24).toString('base64url')
 
   await db.document.update({
     where: { id: doc.id },
     data: {
       shareToken,
-      status: 'SENT',
-      sentAt: new Date(),
+      status: recipients.length ? 'SENT' : 'DRAFT',
+      sentAt: recipients.length ? new Date() : doc.sentAt,
       sharePublic: true,
     },
   })
