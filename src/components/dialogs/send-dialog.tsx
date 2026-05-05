@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Send, UserPlus, X, Copy, CheckCircle, Mail, Link2, ChevronDown } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Send, UserPlus, X, Copy, CheckCircle, Mail, Link2, Loader2 } from 'lucide-react'
 import { Modal, ModalBody, ModalFooter } from '@/components/ui/modal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,17 +22,37 @@ interface SendDialogProps {
 }
 
 export function SendDialog({ open, onClose, documentId, documentTitle }: SendDialogProps) {
-  const { sendDocument, updateDocument, showToast } = useAppStore()
+  const { showToast } = useAppStore()
   const [recipients, setRecipients] = useState<Recipient[]>([
     { name: '', email: '', role: 'signer' },
   ])
   const [subject, setSubject] = useState(`Please sign: ${documentTitle}`)
-  const [message, setMessage] = useState(`Hi,\n\nI'd like you to review and sign this document at your earliest convenience.\n\nThank you!`)
+  const [message, setMessage] = useState(
+    `Hi,\n\nI'd like you to review and sign this document at your earliest convenience.\n\nThank you!`
+  )
   const [linkCopied, setLinkCopied] = useState(false)
   const [sending, setSending] = useState(false)
   const [tab, setTab] = useState<'email' | 'link'>('email')
+  const [shareLink, setShareLink] = useState<string | null>(null)
+  const [loadingLink, setLoadingLink] = useState(false)
 
-  const shareLink = `https://docflow.pro/sign/${documentId}-${Math.random().toString(36).slice(2, 8)}`
+  // When switching to the link tab, generate a real share link via the API
+  useEffect(() => {
+    if (tab !== 'link' || shareLink) return
+    setLoadingLink(true)
+    fetch(`/api/documents/${documentId}/share`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ recipients: [], message: '' }),
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.shareUrl) setShareLink(d.shareUrl)
+        else showToast({ type: 'error', title: 'Error', message: d.error ?? 'Could not generate link' })
+      })
+      .catch(() => showToast({ type: 'error', title: 'Error', message: 'Could not generate link' }))
+      .finally(() => setLoadingLink(false))
+  }, [tab, shareLink, documentId, showToast])
 
   const addRecipient = () => {
     setRecipients((r) => [...r, { name: '', email: '', role: 'signer' }])
@@ -43,10 +63,11 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
   }
 
   const updateRecipient = (i: number, field: keyof Recipient, value: string) => {
-    setRecipients((r) => r.map((rec, idx) => idx === i ? { ...rec, [field]: value } : rec))
+    setRecipients((r) => r.map((rec, idx) => (idx === i ? { ...rec, [field]: value } : rec)))
   }
 
   const handleCopyLink = () => {
+    if (!shareLink) return
     navigator.clipboard.writeText(shareLink).catch(() => {})
     setLinkCopied(true)
     setTimeout(() => setLinkCopied(false), 2000)
@@ -60,25 +81,28 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
       return
     }
     setSending(true)
-    await new Promise((r) => setTimeout(r, 1200))
-
-    const newRecipients = recipients.map((r, i) => ({
-      id: `r-${Date.now()}-${i}`,
-      name: r.name || r.email.split('@')[0],
-      email: r.email,
-      role: r.role,
-      status: 'pending' as const,
-    }))
-
-    updateDocument(documentId, { recipients: newRecipients })
-    sendDocument(documentId)
-    showToast({
-      type: 'success',
-      title: 'Document sent!',
-      message: `Sent to ${recipients.length} recipient${recipients.length > 1 ? 's' : ''}.`,
-    })
-    setSending(false)
-    onClose()
+    try {
+      const res = await fetch(`/api/documents/${documentId}/share`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ recipients, message }),
+      })
+      const d = await res.json()
+      if (!res.ok) {
+        showToast({ type: 'error', title: 'Failed to send', message: d.error ?? 'Something went wrong' })
+        return
+      }
+      showToast({
+        type: 'success',
+        title: 'Document sent!',
+        message: `Sent to ${recipients.length} recipient${recipients.length > 1 ? 's' : ''}.`,
+      })
+      onClose()
+    } catch {
+      showToast({ type: 'error', title: 'Error', message: 'Could not send document' })
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -94,7 +118,9 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
             onClick={() => setTab(t.id as 'email' | 'link')}
             className={cn(
               'flex items-center gap-2 py-3.5 px-4 text-sm font-medium border-b-2 -mb-px transition-colors',
-              tab === t.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'
+              tab === t.id
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
             )}
           >
             <t.icon className="w-4 h-4" />
@@ -145,7 +171,10 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
                       </select>
                     </div>
                     {recipients.length > 1 && (
-                      <button onClick={() => removeRecipient(i)} className="mt-2 text-slate-400 hover:text-red-500 transition-colors">
+                      <button
+                        onClick={() => removeRecipient(i)}
+                        className="mt-2 text-slate-400 hover:text-red-500 transition-colors"
+                      >
                         <X className="w-4 h-4" />
                       </button>
                     )}
@@ -155,11 +184,7 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
             </div>
 
             {/* Subject */}
-            <Input
-              label="Email subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
+            <Input label="Email subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
 
             {/* Message */}
             <div>
@@ -171,60 +196,26 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
                 className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm bg-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
               />
             </div>
-
-            {/* Options */}
-            <div className="flex flex-wrap gap-4 text-sm">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-slate-300 text-blue-600" />
-                <span className="text-slate-700">Remind if not signed in 3 days</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" defaultChecked className="w-4 h-4 rounded border-slate-300 text-blue-600" />
-                <span className="text-slate-700">Require identity verification</span>
-              </label>
-            </div>
           </>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-slate-600">Share this link with anyone who needs to sign or view the document. Anyone with this link can access it.</p>
+            <p className="text-sm text-slate-600">
+              Share this link with anyone who needs to sign or view the document. Anyone with this link can access it.
+            </p>
             <div className="flex items-center gap-2">
               <div className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-600 font-mono truncate">
-                {shareLink}
+                {loadingLink ? (
+                  <span className="flex items-center gap-2 text-slate-400">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" /> Generating link…
+                  </span>
+                ) : (
+                  shareLink ?? '—'
+                )}
               </div>
-              <Button variant="outline" onClick={handleCopyLink} className="flex-shrink-0">
+              <Button variant="outline" onClick={handleCopyLink} disabled={!shareLink} className="flex-shrink-0">
                 {linkCopied ? <CheckCircle className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                 {linkCopied ? 'Copied!' : 'Copy'}
               </Button>
-            </div>
-
-            <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
-              <p className="text-sm font-medium text-amber-800 mb-1">Link access settings</p>
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="access" defaultChecked className="text-blue-600" />
-                  <span className="text-sm text-amber-700">Anyone with the link can sign</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="access" className="text-blue-600" />
-                  <span className="text-sm text-amber-700">Require email verification</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Link expires</label>
-                <select className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option>Never</option>
-                  <option>7 days</option>
-                  <option>30 days</option>
-                  <option>90 days</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">Password protect</label>
-                <input placeholder="Optional password" className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400" />
-              </div>
             </div>
           </div>
         )}
@@ -238,7 +229,7 @@ export function SendDialog({ open, onClose, documentId, documentTitle }: SendDia
             Send Document
           </Button>
         ) : (
-          <Button onClick={handleCopyLink}>
+          <Button onClick={handleCopyLink} disabled={!shareLink}>
             {linkCopied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             {linkCopied ? 'Copied!' : 'Copy Link'}
           </Button>
